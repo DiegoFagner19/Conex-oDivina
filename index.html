@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Conexão Divina - Bíblia Digital Interativa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            background: #eef2f5;
+            color: #1e2a3e;
+            padding-bottom: 80px;
+        }
+
+        /* Header refinado */
+        .header {
+            background: linear-gradient(135deg, #1e3c2c, #2a4a3a);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        #clock {
+            font-size: 1.8rem;
+            font-weight: 600;
+            font-family: monospace;
+            letter-spacing: 2px;
+            background: rgba(0,0,0,0.2);
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-top: 6px;
+        }
+
+        /* Container principal com scroll */
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Card versículo do dia + funcionalidades */
+        .daily-verse {
+            background: white;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+            border: 1px solid rgba(46, 87, 62, 0.15);
+        }
+
+        .daily-verse:hover {
+            transform: translateY(-3px);
+        }
+
+        .verse-text {
+            font-style: italic;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            color: #1f3b30;
+            font-weight: 500;
+        }
+
+        .verse-ref {
+            font-weight: bold;
+            margin-top: 12px;
+            display: inline-block;
+            background: #e9f3ef;
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: #2c6e4e;
+            font-size: 0.9rem;
+        }
+
+        /* Botões de ação do versículo */
+        .verse-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #f0f4f2;
+            border: none;
+            padding: 8px 16px;
+ border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            color: #2d5a46;
+        }
+
+        .action-btn:hover {
+            background: #2c6e4e;
+            color: white;
+            transform: scale(0.98);
+        }
+
+        /* Seções dinâmicas */
+        .section-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            border: 1px solid #dfe6e2;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            border-left: 6px solid #3b7b5e;
+            padding-left: 12px;
+            color: #1e3c2c;
+        }
+
+        /* Busca e lookup */
+        .search-box {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 2;
+            padding: 12px 16px;
+            border: 1px solid #cbdcd3;
+            border-radius: 48px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #3b7b5e;
+            box-shadow: 0 0 0 3px rgba(59,123,94,0.2);
+        }
+
+        .search-box button {
+            background: #2c6e4e;
+            border: none;
+            padding: 0 24px;
+            border-radius: 48px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .search-box button:hover {
+            background: #1d4d38;
+        }
+
+        .verse-result {
+            background: #fafefb;
+            padding: 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #2c6e4e;
+            line-height: 1.5;
+        }
+
+        .audio-player {
+            background: #f3f9f5;
+            border-radius: 40px;
+            padding: 8px;
+            margin-top: 10px;
+        }
+
+        /* Planos de leitura */
+        .plan-item {
+            background: #f8fbf9;
+            margin: 12px 0;
+            padding: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2ece6;
+        }
+
+        .plan-item:hover {
+            background: #eef6f1;
+            transform: translateX(5px);
+        }
+
+        .plan-item h4 {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #d0dfd8;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #2c6e4e;
+            border-radius: 10px;
+        }
+
+        /* Idioma e notificação */
+        .lang-selector {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            background: #ecf3ef;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: #2c6e4e;
+            color: white;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            right: 20px;
+            background: #1e3c2cd9;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            transition: opacity 0.3s;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Navegação inferior melhorada */
+        .nav-menu {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #d4e2da;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+            z-index: 200;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #557c6a;
+            transition: 0.2s;
+            gap: 5px;
+        }
+
+        .nav-item.active {
+            color: #2c6e4e;
+            transform: translateY(-3px);
+        }
+
+        .nav-item span:first-child {
+            font-size: 1.6rem;
+        }
+
+        /* scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div id="clock">--:--:--</div>
+    <h1>📖 Conexão Divina</h1>
+</div>
+
+<div class="main-container" id="appRoot">
+    <!-- seção versículo do dia + ações -->
+    <div class="daily-verse" id="verseCard">
+        <h3>✨ Versículo do Dia</h3>
+        <p class="verse-text" id="dailyVerseText">"Lâmpada para os meus pés é tua palavra e luz, para o meu caminho."</p>
+        <span class="verse-ref" id="dailyVerseRef">Salmos 119:105</span>
+        <div class="verse-actions">
+            <button class="action-btn" id="listenVerseBtn">🎧 Ouvir versículo</button>
+            <button class="action-btn" id="shareVerseBtn">📤 Compartilhar</button>
+            <button class="action-btn" id="newVerseBtn">🔄 Novo versículo</button>
+        </div>
+    </div>
+
+    <!-- Conteúdo dinâmico (Ler / Ouvir / Planos / Idiomas) -->
+    <div id="dynamicContent">
+        <!-- Inicialmente mostra o módulo LER -->
+        <div class="section-card" id="readModule">
+            <div class="section-title">📖 Buscar passagem</div>
+            <div class="search-box">
+                <input type="text" id="bookChapter" placeholder="Ex: João 3:16  ou  Salmos 23" value="Salmos 23">
+                <button id="searchVerseBtn">Buscar</button>
+            </div>
+            <div id="searchResultArea">
+                <div class="verse-result">
+                    <strong>Salmos 23:1-4</strong><br>
+                    "O Senhor é o meu pastor, nada me faltará. Deitar-me faz em verdes pastos..."
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast de notificação -->
+<div id="toastMessage" class="toast-msg">🔔 Ação concluída</div>
+
+<!-- Menu inferior -->
+<div class="nav-menu">
+    <button class="nav-item" data-section="read">📖 <span>Ler</span></button>
+    <button class="nav-item" data-section="audio">🎧 <span>Ouvir</span></button>
+    <button class="nav-item" data-section="plans">📅 <span>Planos</span></button>
+    <button class="nav-item" data-section="lang">🌍 <span>Idiomas</span></button>
+</div>
+
+<script>
+    // ----------------------------- BASE DE DADOS SIMULADA (rica e funcional) -----------------------------
+    // Versículos para lookup e versículo do dia dinâmico
+    const bibleVersesDB = {
+        "joão 3:16": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
+        "salmos 23:1": "O Senhor é o meu pastor; nada me faltará.",
+        "salmos 23": "O Senhor é o meu pastor, nada me faltará. Deitar-me faz em verdes pastos, guia-me mansamente a águas tranquilas. Refrigera a minha alma; guia-me pelas veredas da justiça por amor do seu nome.",
+        "romanons 8:28": "Sabemos que todas as coisas cooperam para o bem daqueles que amam a Deus, daqueles que são chamados segundo o seu propósito.",
+        "jeremias 29:11": "Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal, para vos dar o fim que esperais.",
+        "mateus 5:14": "Vós sois a luz do mundo; não se pode esconder uma cidade edificada sobre um monte.",
+        "filipenses 4:13": "Posso todas as coisas naquele que me fortalece.",
+        "provérbios 3:5": "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento.",
+        "isaías 40:31": "Mas os que esperam no Senhor renovarão as suas forças; subirão com asas como águias."
+    };
+
+    // Array de versículo do dia (variação)
+    const dailyVersesList = [
+        { text: "Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.", ref: "Salmos 119:105" },
+        { text: "Buscai ao Senhor enquanto se pode achar, invocai-o enquanto está perto.", ref: "Isaías 55:6" },
+        { text: "Tudo posso naquele que me fortalece.", ref: "Filipenses 4:13" },
+        { text: "O Senhor é meu pastor, nada me faltará.", ref: "Salmos 23:1" },
+        { text: "E conhecereis a verdade, e a verdade vos libertará.", ref: "João 8:32" },
+        { text: "Alegrai-vos sempre no Senhor; outra vez digo, alegrai-vos.", ref: "Filipenses 4:4" },
+        { text: "Nem só de pão viverá o homem, mas de toda palavra que sai da boca de Deus.", ref: "Mateus 4:4" }
+    ];
+
+    let currentDailyIndex = 0;
+
+    // Sistema de idioma (tradução simples)
+    let currentLang = 'pt';
+    const translations = {
+        pt: {
+            listenBtn: "🎧 Ouvir versículo",
+            shareBtn: "📤 Compartilhar",
+            newVerseBtn: "🔄 Novo versículo",
+            readTitle: "📖 Buscar passagem",
+            searchPlaceholder: "Ex: João 3:16 ou Salmos 23",
+            searchBtn: "Buscar",
+            audioTitle: "🎧 Áudio da Palavra",
+            audioDesc: "Ouça a narração do versículo do dia ou da passagem selecionada.",
+            playVerseAudio: "🔊 Ouvir versículo do dia",
+            playSearchAudio: "🎙️ Ouvir última busca",
+            plansTitle: "📅 Planos de Leitura",
+            plan1: "Plano Anual da Bíblia",
+            plan2: "30 Dias de Sabedoria (Provérbios)",
+            plan3: "Novo Testamento em 40 Dias",
+            langTitle: "🌍 Escolha o Idioma",
+            langPT: "Português",
+            langEN: "Inglês",
+            langES: "Espanhol",
+            toastDefault: "✅ Ação concluída!",
+            verseShared: "✉️ Versículo compartilhado!",
+            audioPlaying: "🔊 Reproduzindo áudio...",
+        },
+        en: {
+            listenBtn: "🎧 Listen verse",
+            shareBtn: "📤 Share",
+            newVerseBtn: "🔄 New verse",
+            readTitle: "📖 Search passage",
+            searchPlaceholder: "e.g., John 3:16 or Psalms 23",
+            searchBtn: "Search",
+            audioTitle: "🎧 Audio of the Word",
+            audioDesc: "Listen to the verse of the day or the searched passage.",
+            playVerseAudio: "🔊 Play verse of the day",
+            playSearchAudio: "🎙️ Play last search",
+            plansTitle: "📅 Reading Plans",
+            plan1: "Annual Bible Plan",
+            plan2: "30 Days of Wisdom (Proverbs)",
+            plan3: "New Testament in 40 Days",
+            langTitle: "🌍 Choose Language",
+            langPT: "Portuguese",
+            langEN: "English",
+            langES: "Spanish",
+            toastDefault: "✅ Action completed!",
+            verseShared: "✉️ Verse shared!",
+            audioPlaying: "🔊 Playing audio...",
+        },
+        es: {
+            listenBtn: "🎧 Escuchar versículo",
+            shareBtn: "📤 Compartir",
+            newVerseBtn: "🔄 Nuevo versículo",
+            readTitle: "📖 Buscar pasaje",
+            searchPlaceholder: "Ej: Juan 3:16 o Salmos 23",
+            searchBtn: "Buscar",
+            audioTitle: "🎧 Audio de la Palabra",
+            audioDesc: "Escuche el versículo del día o la búsqueda reciente.",
+            playVerseAudio: "🔊 Escuchar versículo del día",
+            playSearchAudio: "🎙️ Escuchar última búsqueda",
+            plansTitle: "📅 Planes de Lectura",
+            plan1: "Plan Bíblico Anual",
+            plan2: "30 Días de Sabiduría (Proverbios)",
+            plan3: "Nuevo Testamento en 40 Días",
+            langTitle: "🌍 Elegir Idioma",
+            langPT: "Portugués",
+            langEN: "Inglés",
+            langES: "Español",
+            toastDefault: "✅ ¡Acción completada!",
+            verseShared: "✉️ ¡Versículo compartido!",
+            audioPlaying: "🔊 Reproduciendo audio...",
+        }
+    };
+
+    // atualizar textos da UI reativos ao idioma (na interface atual)
+    function applyLanguage() {
+        const t = translations[currentLang];
+        // Atualiza botões do versículo (daily verse card)
+        const listenBtn = document.getElementById('listenVerseBtn');
+        const shareBtn = document.getElementById('shareVerseBtn');
+        const newVerseBtn = document.getElementById('newVerseBtn');
+        if (listenBtn) listenBtn.innerHTML = t.listenBtn;
+        if (shareBtn) shareBtn.innerHTML = t.shareBtn;
+        if (newVerseBtn) newVerseBtn.innerHTML = t.newVerseBtn;
+        
+        // Atualiza módulo atual se estiver visível (conforme a seção ativa)
+        const activeSection = document.querySelector('.nav-item.active')?.dataset.section || 'read';
+        renderSection(activeSection);
+    }
+
+    // Buscar versículo no "dicionário" e retornar texto + referência formatada
+    function lookupVerse(query) {
+        let normalized = query.trim().toLowerCase();
+        // Remove acentos simples (suporte básico)
+        normalized = normalized.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        for (let key in bibleVersesDB) {
+            let keyNorm = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (keyNorm === normalized) {
+                return { text: bibleVersesDB[key], reference: key };
+            }
+        }
+        // suporte parcial: se contém parte da chave
+        for (let key in bibleVersesDB) {
+            if (normalized.includes(keyNorm(key)) || keyNorm(key).includes(normalized)) {
+                return { text: bibleVersesDB[key], reference: key };
+            }
+        }
+        return null;
+    }
+    function keyNorm(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+
+    let lastSearchedVerse = { text: "O Senhor é o meu pastor, nada me faltará.", ref: "Salmos 23:1" };
+
+    function performSearch() {
+        const input = document.getElementById('bookChapter').value;
+        if (!input.trim()) {
+            showToast("Digite uma referência (ex: João 3:16)");
+            return;
+        }
+        const result = lookupVerse(input);
+        const resultArea = document.getElementById('searchResultArea');
+        if (result) {
+            lastSearchedVerse = { text: result.text, ref: result.reference };
+            resultArea.innerHTML = `<div class="verse-result"><strong>${result.reference}</strong><br>“${result.text}”</div>`;
+            showToast(`📖 ${result.reference} carregado`);
+        } else {
+            resultArea.innerHTML = `<div class="verse-result">⚠️ Versículo não encontrado no banco. Experimente: "Salmos 23", "João 3:16"</div>`;
+            showToast("Referência não encontrada");
+        }
+    }
+
+    function showToast(msg, duration = 2000) {
+        const toast = document.getElementById('toastMessage');
+        toast.style.opacity = '1';
+        toast.innerText = msg;
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, duration);
+    }
+
+    // Função para sintetizar voz (Web Speech API)
+    function speakText(text, reference) {
+        if (!window.speechSynthesis) {
+            showToast("Seu navegador não suporta áudio.");
+            return;
+        }
+        const utterance = new SpeechSynthesisUtterance(`${reference}. ${text}`);
+        utterance.lang = currentLang === 'pt' ? 'pt-BR' : (currentLang === 'en' ? 'en-US' : 'es-ES');
+        utterance.rate = 0.9;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+        showToast(translations[currentLang].audioPlaying);
+    }
+
+    function speakVerseOfDay() {
+        const verseText = document.getElementById('dailyVerseText').innerText;
+        const verseRef = document.getElementById('dailyVerseRef').innerText;
+        speakText(verseText, verseRef);
+    }
+
+    function speakLastSearched() {
+        speakText(lastSearchedVerse.text, lastSearchedVerse.ref);
+    }
+
+    function shareCurrentVerse() {
+        const text = document.getElementById('dailyVerseText').innerText;
+        const ref = document.getElementById('dailyVerseRef').innerText;
+        if (navigator.share) {
+            navigator.share({ title: 'Versículo do Dia', text: `“${text}” — ${ref}` });
+        } else {
+            navigator.clipboard.writeText(`“${text}” — ${ref}`);
+            showToast(translations[currentLang].verseShared);
+        }
+    }
+
+    function changeDailyVerse() {
+        currentDailyIndex = (currentDailyIndex + 1) % dailyVersesList.length;
+        const verse = dailyVersesList[currentDailyIndex];
+        document.getElementById('dailyVerseText').innerText = verse.text;
+        document.getElementById('dailyVerseRef').innerText = verse.ref;
+        showToast("✨ Novo versículo do dia");
+    }
+
+    // Renderização dinâmica dos módulos
+    function renderSection(section) {
+        const container = document.getElementById('dynamicContent');
+        const t = translations[currentLang];
+        if (section === 'read') {
+            container.innerHTML = `
+                <div class="section-card">
+                    <div class="section-title">${t.readTitle}</div>
+                    <div class="search-box">
+                        <input type="text" id="bookChapter" placeholder="${t.searchPlaceholder}" value="Salmos 23">
+                        <button id="searchVerseBtn">${t.searchBtn}</button>
+                    </div>
+                    <div id="searchResultArea">
+                        <div class="verse-result"><strong>Salmos 23</strong><br>“${bibleVersesDB["salmos 23"]}”</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('searchVerseBtn')?.addEventListener('click', performSearch);
+            const inputElem = document.getElementById('bookChapter');
+            if(inputElem) inputElem.addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
+        } 
+        else if (section === 'audio') {
+            container.innerHTML = `
+                <div class="section-card">
+                    <div class="section-title">${t.audioTitle}</div>
+                    <p style="margin-bottom: 12px;">${t.audioDesc}</p>
+                    <button class="action-btn" id="speakDailyBtn">${t.playVerseAudio}</button>
+                    <button class="action-btn" id="speakSearchBtn" style="margin-left: 12px;">${t.playSearchAudio}</button>
+                    <div style="margin-top: 16px; font-size:0.85rem; background:#eef3f0; padding:10px; border-radius:24px;">
+                        🎙️ Clique e ouça a Palavra em voz alta.
+                    </div>
+                </div>
+            `;
+            document.getElementById('speakDailyBtn')?.addEventListener('click', () => {
+                const vt = document.getElementById('dailyVerseText').innerText;
+                const vr = document.getElementById('dailyVerseRef').innerText;
+                speakText(vt, vr);
+            });
+            document.getElementById('speakSearchBtn')?.addEventListener('click', () => speakLastSearched());
+        }
+        else if (section === 'plans') {
+            container.innerHTML = `
+                <div class="section-card">
+                    <div class="section-title">${t.plansTitle}</div>
+                    <div id="plansList"></div>
+                    <div style="margin-top: 15px; font-size:0.85rem; color:#4b6b5b;">✅ Clique em um plano para marcar progresso (simulado).</div>
+                </div>
+            `;
+            const plansArray = [
+                { name: t.plan1, progress: 35 },
+                { name: t.plan2, progress: 62 },
+                { name: t.plan3, progress: 18 }
+            ];
+            const plansContainer = document.getElementById('plansList');
+            plansArray.forEach((plan, idx) => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'plan-item';
+                planDiv.innerHTML = `
+                    <h4>${plan.name} <span style="font-size:0.75rem;">${plan.progress}%</span></h4>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${plan.progress}%;"></div></div>
+                    <small>📅 Clique para avançar 5%</small>
+                `;
+                planDiv.addEventListener('click', () => {
+                    let newProgress = Math.min(100, plan.progress + 5);
+                    plan.progress = newProgress;
+                    const fillDiv = planDiv.querySelector('.progress-fill');
+                    const spanPercent = planDiv.querySelector('h4 span');
+                    if(fillDiv) fillDiv.style.width = `${newProgress}%`;
+                    if(spanPercent) spanPercent.innerText = `${newProgress}%`;
+                    showToast(`📖 ${plan.name}: ${newProgress}% completo`);
+                });
+                plansContainer.appendChild(planDiv);
+            });
+        }
+        else if (section === 'lang') {
+            container.innerHTML = `
+                <div class="section-card">
+                    <div class="section-title">${t.langTitle}</div>
+                    <div class="lang-selector">
+                        <button class="lang-btn ${currentLang === 'pt' ? 'active' : ''}" data-lang="pt">${t.langPT}</button>
+                        <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">${t.langEN}</button>
+                        <button class="lang-btn ${currentLang === 'es' ? 'active' : ''}" data-lang="es">${t.langES}</button>
+                    </div>
+                    <p style="margin-top: 16px;">🌐 Idioma alterado instantaneamente. Alguns textos bíblicos mantêm português base, mas interface e narração são ajustadas.</p>
+                </div>
+            `;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const newLang = btn.dataset.lang;
+                    currentLang = newLang;
+                    applyLanguage();
+                    renderSection('lang');
+                    showToast(`Idioma alterado para ${newLang.toUpperCase()}`);
+                });
+            });
+        }
+    }
+
+    // Atualizar relógio
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString('pt-BR');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // EVENTOS & inicialização
+    function init() {
+        // Carregar versículo aleatório inicial
+        const randomIndex = Math.floor(Math.random() * dailyVersesList.length);
+        currentDailyIndex = randomIndex;
+        const initVerse = dailyVersesList[currentDailyIndex];
+        document.getElementById('dailyVerseText').innerText = initVerse.text;
+        document.getElementById('dailyVerseRef').innerText = initVerse.ref;
+        
+        document.getElementById('listenVerseBtn').addEventListener('click', speakVerseOfDay);
+        document.getElementById('shareVerseBtn').addEventListener('click', shareCurrentVerse);
+        document.getElementById('newVerseBtn').addEventListener('click', changeDailyVerse);
+        
+        // Navegação
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                const section = item.dataset.section;
+                renderSection(section);
+            });
+        });
+        // ativar primeiro menu (Ler)
+        document.querySelector('.nav-item[data-section="read"]').classList.add('active');
+        renderSection('read');
+        applyLanguage();
+        
+        // pré-definir lastSearchedVerse
+        lastSearchedVerse = { text: bibleVersesDB["salmos 23"], ref: "Salmos 23" };
+    }
+    init();
+</script>
+</body>
+</html>
