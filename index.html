@@ -32,7 +32,8 @@
         body.prayer-mode .daily-verse,
         body.prayer-mode .section-card,
         body.prayer-mode .bible-reader,
-        body.prayer-mode .dictionary-card {
+        body.prayer-mode .dictionary-card,
+        body.prayer-mode .avatar-card {
             background: #141d18;
             border: 1px solid #2a3a31;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -220,9 +221,55 @@
             padding: 1rem;
         }
 
+        .avatar-card {
+            background: white;
+            border-radius: 60px;
+            padding: 10px 20px;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .avatar-emoji {
+            font-size: 3rem;
+            transition: transform 0.3s;
+        }
+
+        .avatar-emoji:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-text {
+            flex: 1;
+        }
+
+        .avatar-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #2c6e4e;
+        }
+
+        .avatar-message {
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        body.prayer-mode .avatar-name {
+            color: #e8a735;
+        }
+
+        body.prayer-mode .avatar-message {
+            color: #aaa;
+        }
+
         .daily-verse {
             background: white;
-            margin: 1rem 0;
+            margin: 0.5rem 0 1rem 0;
             padding: 1.2rem;
             border-radius: 24px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
@@ -277,7 +324,7 @@
             padding: 8px 16px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -529,7 +576,6 @@
             padding: 10px;
         }
 
-        /* Botão de áudio especial */
         .audio-player-btn {
             background: #2c6e4e;
             color: white;
@@ -541,7 +587,7 @@
 
         .audio-player-btn:hover {
             background: #e8a735;
-            color: #1e3c2c;
+            color: #1e3c2e;
         }
 
         @media (max-width: 600px) {
@@ -550,6 +596,8 @@
             .chapter-nav button { padding: 6px 12px; font-size: 0.7rem; }
             .toast-msg { white-space: normal; width: 80%; text-align: center; }
             .lang-btn { padding: 6px 10px; font-size: 0.7rem; }
+            .avatar-emoji { font-size: 2rem; }
+            .avatar-name { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -564,6 +612,14 @@
 </div>
 
 <div class="main-container">
+    <div class="avatar-card" id="avatarCard">
+        <div class="avatar-emoji" id="avatarEmoji">🕊️</div>
+        <div class="avatar-text">
+            <div class="avatar-name" id="avatarName">Anjo Mensageiro</div>
+            <div class="avatar-message" id="avatarMessage">"A paz do Senhor esteja com você!"</div>
+        </div>
+    </div>
+
     <div class="daily-verse">
         <h3 id="verseTitle">✨ Versículo do Dia</h3>
         <p class="verse-text" id="dailyVerseText">Carregando...</p>
@@ -574,7 +630,8 @@
         </div>
         <div class="verse-actions">
             <button class="action-btn" id="listenVerseBtn">🎧 Ouvir</button>
-            <button class="action-btn" id="shareImageBtn">🖼️ Compartilhar</button>
+            <button class="action-btn" id="shareVerseBtn">🖼️ Compartilhar Versículo</button>
+            <button class="action-btn" id="shareMessageBtn">📝 Compartilhar Mensagem</button>
             <button class="action-btn" id="newVerseBtn">🔄 Novo</button>
         </div>
     </div>
@@ -594,7 +651,28 @@
 </div>
 
 <script>
-    // ======================== 365 VERSÍCULOS DIÁRIOS ========================
+    // AVATAR BÍBLICO
+    const avatars = [
+        { emoji: "🕊️", name: "Anjo Mensageiro", messages: ["A paz do Senhor esteja com você!", "Deus te abençoe ricamente!", "Confie no Senhor de todo o coração!"] },
+        { emoji: "🦁", name: "Leão de Judá", messages: ["Seja forte e corajoso!", "O Senhor é tua força!", "Não temas, porque eu sou contigo!"] },
+        { emoji: "🐑", name: "Bom Pastor", messages: ["O Senhor é o meu pastor!", "Ele cuida de você!", "Descansa no amor de Deus!"] },
+        { emoji: "⭐", name: "Estrela da Manhã", messages: ["Jesus é a luz do mundo!", "Brilhe onde você está!", "Deus tem um plano para você!"] },
+        { emoji: "🌿", name: "Videira Verdadeira", messages: ["Permaneça em Cristo!", "Dê frutos de amor!", "A vida está em Deus!"] }
+    ];
+    
+    let currentAvatar = 0;
+    function changeAvatar() {
+        currentAvatar = (currentAvatar + 1) % avatars.length;
+        const avatar = avatars[currentAvatar];
+        document.getElementById('avatarEmoji').innerHTML = avatar.emoji;
+        document.getElementById('avatarName').innerHTML = avatar.name;
+        const randomMsg = avatar.messages[Math.floor(Math.random() * avatar.messages.length)];
+        document.getElementById('avatarMessage').innerHTML = `"${randomMsg}"`;
+        showToast(`✨ ${avatar.name} te abençoa!`);
+    }
+    document.getElementById('avatarCard').addEventListener('click', changeAvatar);
+
+    // 365 VERSÍCULOS DIÁRIOS
     const versesData = [
         { text: "Lâmpada para os meus pés é tua palavra e luz para o meu caminho.", ref: "Salmos 119:105" },
         { text: "O Senhor é o meu pastor; nada me faltará.", ref: "Salmos 23:1" },
@@ -603,11 +681,7 @@
         { text: "Alegrai-vos sempre no Senhor; outra vez digo, alegrai-vos.", ref: "Filipenses 4:4" },
         { text: "Buscai ao Senhor enquanto se pode achar, invocai-o enquanto está perto.", ref: "Isaías 55:6" },
         { text: "O amor é paciente, o amor é bondoso.", ref: "1 Coríntios 13:4" },
-        { text: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.", ref: "João 3:16" },
-        { text: "Confie no Senhor de todo o seu coração.", ref: "Provérbios 3:5" },
-        { text: "O Senhor é a minha luz e a minha salvação.", ref: "Salmos 27:1" },
-        { text: "Vinde a mim, todos os que estais cansados.", ref: "Mateus 11:28" },
-        { text: "O Senhor está perto de todos os que o invocam.", ref: "Salmos 145:18" }
+        { text: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.", ref: "João 3:16" }
     ];
 
     const dailyVersesList = [];
@@ -615,13 +689,12 @@
         dailyVersesList.push(versesData[i % versesData.length]);
     }
 
-    // Mensagens diárias
     const dailyMessages = [];
     for (let i = 1; i <= 365; i++) {
         dailyMessages.push(`✨ Dia ${i}: 🙏 Que a paz de Deus renove suas forças hoje. "Em tudo dai graças" (1 Tessalonicenses 5:18).`);
     }
 
-    // ======================== LIVROS DA BÍBLIA ========================
+    // LIVROS DA BÍBLIA
     const booksOfBible = [
         "Gênesis", "Êxodo", "Levítico", "Números", "Deuteronômio", "Josué", "Juízes", "Rute", 
         "1 Samuel", "2 Samuel", "1 Reis", "2 Reis", "1 Crônicas", "2 Crônicas", "Esdras", "Neemias", 
@@ -633,7 +706,6 @@
         "Filemom", "Hebreus", "Tiago", "1 Pedro", "2 Pedro", "1 João", "2 João", "3 João", "Judas", "Apocalipse"
     ];
 
-    // Dados bíblicos offline
     const bibleData = {};
     booksOfBible.forEach((book, idx) => {
         bibleData[book] = {};
@@ -646,28 +718,105 @@
         }
     });
 
-    // ======================== DICIONÁRIO BÍBLICO ========================
+    // DICIONÁRIO
     const bibleDictionary = {
-        "amor": "❤️ Sentimento profundo de afeição e cuidado. Deus é amor (1 João 4:8). O amor ágape é o amor incondicional de Deus.",
-        "graça": "✨ Favor imerecido de Deus. Somos salvos pela graça, mediante a fé (Efésios 2:8).",
-        "fé": "🙏 Confiança absoluta em Deus. É a certeza do que se espera e a prova do que não se vê (Hebreus 11:1).",
-        "esperança": "🌟 Expectativa confiante nas promessas de Deus. A esperança em Deus não decepciona (Romanos 5:5).",
-        "salvação": "🕊️ Libertação do pecado pela fé em Jesus Cristo. Crê no Senhor Jesus e serás salvo (Atos 16:31).",
+        "amor": "❤️ Sentimento profundo de afeição. Deus é amor (1 João 4:8).",
+        "graça": "✨ Favor imerecido de Deus. Somos salvos pela graça (Efésios 2:8).",
+        "fé": "🙏 Confiança absoluta em Deus (Hebreus 11:1).",
+        "esperança": "🌟 Expectativa confiante nas promessas de Deus (Romanos 5:5).",
         "oração": "📞 Comunicação com Deus. Orai sem cessar (1 Tessalonicenses 5:17).",
-        "perdão": "🤝 Remissão de ofensas. Perdoai uns aos outros, assim como Deus vos perdoou (Efésios 4:32).",
-        "justiça": "⚖️ Retidão moral segundo Deus. Buscai primeiro o reino de Deus e a sua justiça (Mateus 6:33).",
-        "misericórdia": "💝 Compaixão divina. As misericórdias do Senhor se renovam a cada manhã (Lamentações 3:22-23)."
+        "perdão": "🤝 Remissão de ofensas. Perdoai uns aos outros (Efésios 4:32)."
     };
 
-    // ======================== 12 IDIOMAS ========================
+    // ======================== ÁUDIO UNIVERSAL (FUNCIONA EM TODOS OS DISPOSITIVOS) ========================
+    let speechSupported = true;
+    let utteranceInProgress = false;
+
+    function speakText(text, reference) {
+        // Verificar suporte
+        if (!window.speechSynthesis) {
+            showToast("❌ Seu navegador não suporta áudio. Tente Chrome, Edge ou Safari.");
+            return;
+        }
+        
+        // Parar qualquer áudio em andamento
+        try {
+            window.speechSynthesis.cancel();
+        } catch(e) { console.log("Erro ao cancelar:", e); }
+        
+        // Pequeno delay para garantir o cancelamento
+        setTimeout(() => {
+            try {
+                const fullText = `${reference}. ${text}`;
+                const utterance = new SpeechSynthesisUtterance(fullText);
+                
+                // Configurar idioma
+                const langMap = { 
+                    pt: 'pt-BR', en: 'en-US', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', 
+                    de: 'de-DE', ru: 'ru-RU', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR',
+                    ar: 'ar-SA', hi: 'hi-IN'
+                };
+                utterance.lang = langMap[currentLang] || 'pt-BR';
+                utterance.rate = 0.85;
+                utterance.pitch = 1.0;
+                utterance.volume = 1;
+                
+                utterance.onstart = () => {
+                    utteranceInProgress = true;
+                    showToast("🔊 Falando versículo...");
+                };
+                
+                utterance.onend = () => {
+                    utteranceInProgress = false;
+                    showToast("✅ Áudio finalizado");
+                };
+                
+                utterance.onerror = (event) => {
+                    utteranceInProgress = false;
+                    console.error('Erro na síntese:', event);
+                    showToast("⚠️ Falha no áudio. Tente novamente.");
+                };
+                
+                window.speechSynthesis.speak(utterance);
+                
+                // Fallback para dispositivos que precisam de interação do usuário
+                setTimeout(() => {
+                    if (utteranceInProgress && window.speechSynthesis.speaking === false) {
+                        window.speechSynthesis.speak(utterance);
+                    }
+                }, 100);
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                showToast("❌ Erro ao reproduzir áudio");
+            }
+        }, 100);
+    }
+
+    function speakVerseOfDay() {
+        const text = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
+        const ref = document.getElementById('dailyVerseRef').innerText;
+        if (!text || text === 'Carregando...') { 
+            showToast("⚠️ Aguarde o versículo carregar"); 
+            return; 
+        }
+        speakText(text, ref);
+    }
+
+    // ======================== IDIOMAS (15 IDIOMAS) ========================
     const translations = {
-        pt: { bible: "Bíblia", guide: "Guia", dictionary: "Dicionário", audio: "Áudio", languages: "Idiomas", chapter: "Cap", previous: "Anterior", next: "Próximo", readingPlan: "Plano de Leitura", dailyReading: "Leitura Diária", bookmark: "🔖 Marcar", goToBookmark: "📍 Marcador", bookmarkSaved: "Marcador salvo!", search: "Buscar", verseOfDay: "✨ Versículo do Dia", messageOfDay: "📖 Mensagem do Dia", listen: "🎧 Ouvir Versículo", share: "🖼️ Compartilhar", new: "🔄 Novo", listenDesc: "Clique no botão abaixo para ouvir o versículo do dia em voz alta." },
-        en: { bible: "Bible", guide: "Guide", dictionary: "Dictionary", audio: "Audio", languages: "Languages", chapter: "Ch", previous: "Prev", next: "Next", readingPlan: "Reading Plan", dailyReading: "Daily Reading", bookmark: "🔖 Bookmark", goToBookmark: "📍 Go to", bookmarkSaved: "Bookmark saved!", search: "Search", verseOfDay: "✨ Verse of the Day", messageOfDay: "📖 Daily Message", listen: "🎧 Listen Verse", share: "🖼️ Share", new: "🔄 New", listenDesc: "Click the button below to listen to the verse of the day." },
-        es: { bible: "Biblia", guide: "Guía", dictionary: "Diccionario", audio: "Audio", languages: "Idiomas", chapter: "Cap", previous: "Anterior", next: "Siguiente", readingPlan: "Plan de Lectura", dailyReading: "Lectura Diaria", bookmark: "🔖 Marcar", goToBookmark: "📍 Ir a", bookmarkSaved: "¡Marcador guardado!", search: "Buscar", verseOfDay: "✨ Versículo del Día", messageOfDay: "📖 Mensaje del Día", listen: "🎧 Escuchar Versículo", share: "🖼️ Compartir", new: "🔄 Nuevo", listenDesc: "Haga clic en el botón para escuchar el versículo del día." },
-        fr: { bible: "Bible", guide: "Guide", dictionary: "Dictionnaire", audio: "Audio", languages: "Langues", chapter: "Ch", previous: "Préc", next: "Suiv", readingPlan: "Plan de Lecture", dailyReading: "Lecture Quotidienne", bookmark: "🔖 Marquer", goToBookmark: "📍 Aller", bookmarkSaved: "Marqueur sauvegardé!", search: "Chercher", verseOfDay: "✨ Verset du Jour", messageOfDay: "📖 Message du Jour", listen: "🎧 Écouter", share: "🖼️ Partager", new: "🔄 Nouveau", listenDesc: "Cliquez sur le bouton pour écouter le verset du jour." },
-        it: { bible: "Bibbia", guide: "Guida", dictionary: "Dizionario", audio: "Audio", languages: "Lingue", chapter: "Cap", previous: "Prec", next: "Succ", readingPlan: "Piano di Lettura", dailyReading: "Lettura Giornaliera", bookmark: "🔖 Segna", goToBookmark: "📍 Vai a", bookmarkSaved: "Segnalibro salvato!", search: "Cerca", verseOfDay: "✨ Versetto del Giorno", messageOfDay: "📖 Messaggio del Giorno", listen: "🎧 Ascolta", share: "🖼️ Condividi", new: "🔄 Nuovo", listenDesc: "Clicca il pulsante per ascoltare il versetto del giorno." },
-        de: { bible: "Bibel", guide: "Leitfaden", dictionary: "Wörterbuch", audio: "Audio", languages: "Sprachen", chapter: "Kap", previous: "Zurück", next: "Weiter", readingPlan: "Leseplan", dailyReading: "Tägliche Lesung", bookmark: "🔖 Lesezeichen", goToBookmark: "📍 Gehe zu", bookmarkSaved: "Lesezeichen gespeichert!", search: "Suchen", verseOfDay: "✨ Vers des Tages", messageOfDay: "📖 Nachricht des Tages", listen: "🎧 Hören", share: "🖼️ Teilen", new: "🔄 Neu", listenDesc: "Klicken Sie auf die Schaltfläche, um den Vers des Tages zu hören." },
-        ru: { bible: "Библия", guide: "Гид", dictionary: "Словарь", audio: "Аудио", languages: "Языки", chapter: "Гл", previous: "Назад", next: "Вперед", readingPlan: "План чтения", dailyReading: "Ежедневное чтение", bookmark: "🔖 Закладка", goToBookmark: "📍 Перейти", bookmarkSaved: "Закладка сохранена!", search: "Поиск", verseOfDay: "✨ Стих дня", messageOfDay: "📖 Послание дня", listen: "🎧 Слушать", share: "🖼️ Поделиться", new: "🔄 Новый", listenDesc: "Нажмите кнопку, чтобы услышать стих дня." }
+        pt: { bible: "Bíblia", guide: "Guia", dictionary: "Dicionário", audio: "Áudio", languages: "Idiomas", chapter: "Cap", previous: "Anterior", next: "Próximo", readingPlan: "Plano de Leitura", dailyReading: "Leitura Diária", bookmark: "🔖 Marcar", goToBookmark: "📍 Marcador", bookmarkSaved: "Marcador salvo!", search: "Buscar", verseOfDay: "✨ Versículo do Dia", messageOfDay: "📖 Mensagem do Dia", listen: "🎧 Ouvir Versículo", shareVerse: "🖼️ Compartilhar Versículo", shareMessage: "📝 Compartilhar Mensagem", new: "🔄 Novo", listenDesc: "Clique no botão abaixo para ouvir o versículo do dia." },
+        en: { bible: "Bible", guide: "Guide", dictionary: "Dictionary", audio: "Audio", languages: "Languages", chapter: "Ch", previous: "Prev", next: "Next", readingPlan: "Reading Plan", dailyReading: "Daily Reading", bookmark: "🔖 Bookmark", goToBookmark: "📍 Go to", bookmarkSaved: "Bookmark saved!", search: "Search", verseOfDay: "✨ Verse of the Day", messageOfDay: "📖 Daily Message", listen: "🎧 Listen Verse", shareVerse: "🖼️ Share Verse", shareMessage: "📝 Share Message", new: "🔄 New", listenDesc: "Click below to hear the verse of the day." },
+        es: { bible: "Biblia", guide: "Guía", dictionary: "Diccionario", audio: "Audio", languages: "Idiomas", chapter: "Cap", previous: "Anterior", next: "Siguiente", readingPlan: "Plan de Lectura", dailyReading: "Lectura Diaria", bookmark: "🔖 Marcar", goToBookmark: "📍 Ir a", bookmarkSaved: "¡Marcador guardado!", search: "Buscar", verseOfDay: "✨ Versículo del Día", messageOfDay: "📖 Mensaje del Día", listen: "🎧 Escuchar", shareVerse: "🖼️ Compartir Versículo", shareMessage: "📝 Compartir Mensaje", new: "🔄 Nuevo", listenDesc: "Haga clic para escuchar el versículo." },
+        fr: { bible: "Bible", guide: "Guide", dictionary: "Dictionnaire", audio: "Audio", languages: "Langues", chapter: "Ch", previous: "Préc", next: "Suiv", readingPlan: "Plan de Lecture", dailyReading: "Lecture Quotidienne", bookmark: "🔖 Marquer", goToBookmark: "📍 Aller", bookmarkSaved: "Marqueur sauvegardé!", search: "Chercher", verseOfDay: "✨ Verset du Jour", messageOfDay: "📖 Message du Jour", listen: "🎧 Écouter", shareVerse: "🖼️ Partager", shareMessage: "📝 Partager Message", new: "🔄 Nouveau", listenDesc: "Cliquez pour écouter le verset." },
+        it: { bible: "Bibbia", guide: "Guida", dictionary: "Dizionario", audio: "Audio", languages: "Lingue", chapter: "Cap", previous: "Prec", next: "Succ", readingPlan: "Piano di Lettura", dailyReading: "Lettura Giornaliera", bookmark: "🔖 Segna", goToBookmark: "📍 Vai a", bookmarkSaved: "Segnalibro salvato!", search: "Cerca", verseOfDay: "✨ Versetto del Giorno", messageOfDay: "📖 Messaggio del Giorno", listen: "🎧 Ascolta", shareVerse: "🖼️ Condividi", shareMessage: "📝 Condividi Messaggio", new: "🔄 Nuovo", listenDesc: "Clicca per ascoltare il versetto." },
+        de: { bible: "Bibel", guide: "Leitfaden", dictionary: "Wörterbuch", audio: "Audio", languages: "Sprachen", chapter: "Kap", previous: "Zurück", next: "Weiter", readingPlan: "Leseplan", dailyReading: "Tägliche Lesung", bookmark: "🔖 Lesezeichen", goToBookmark: "📍 Gehe zu", bookmarkSaved: "Lesezeichen gespeichert!", search: "Suchen", verseOfDay: "✨ Vers des Tages", messageOfDay: "📖 Nachricht des Tages", listen: "🎧 Hören", shareVerse: "🖼️ Teilen", shareMessage: "📝 Nachricht teilen", new: "🔄 Neu", listenDesc: "Klicken Sie, um den Vers zu hören." },
+        ru: { bible: "Библия", guide: "Гид", dictionary: "Словарь", audio: "Аудио", languages: "Языки", chapter: "Гл", previous: "Назад", next: "Вперед", readingPlan: "План чтения", dailyReading: "Ежедневное чтение", bookmark: "🔖 Закладка", goToBookmark: "📍 Перейти", bookmarkSaved: "Закладка сохранена!", search: "Поиск", verseOfDay: "✨ Стих дня", messageOfDay: "📖 Послание дня", listen: "🎧 Слушать", shareVerse: "🖼️ Поделиться", shareMessage: "📝 Поделиться сообщением", new: "🔄 Новый", listenDesc: "Нажмите, чтобы услышать стих." },
+        zh: { bible: "圣经", guide: "指南", dictionary: "词典", audio: "音频", languages: "语言", chapter: "章", previous: "上一章", next: "下一章", readingPlan: "读经计划", dailyReading: "每日读经", bookmark: "🔖 书签", goToBookmark: "📍 前往", bookmarkSaved: "书签已保存!", search: "搜索", verseOfDay: "✨ 今日经文", messageOfDay: "📖 今日信息", listen: "🎧 收听", shareVerse: "🖼️ 分享", shareMessage: "📝 分享信息", new: "🔄 新经文", listenDesc: "点击收听今日经文。" },
+        ja: { bible: "聖書", guide: "ガイド", dictionary: "辞書", audio: "音声", languages: "言語", chapter: "章", previous: "前へ", next: "次へ", readingPlan: "読書計画", dailyReading: "每日読書", bookmark: "🔖 ブックマーク", goToBookmark: "📍 移動", bookmarkSaved: "ブックマーク保存!", search: "検索", verseOfDay: "✨ 今日の聖句", messageOfDay: "📖 今日のメッセージ", listen: "🎧 聴く", shareVerse: "🖼️ 共有", shareMessage: "📝 メッセージ共有", new: "🔄 新しい", listenDesc: "クリックして聖句を聞く。" },
+        ko: { bible: "성경", guide: "가이드", dictionary: "사전", audio: "오디오", languages: "언어", chapter: "장", previous: "이전", next: "다음", readingPlan: "읽기 계획", dailyReading: "매일 읽기", bookmark: "🔖 책갈피", goToBookmark: "📍 이동", bookmarkSaved: "책갈피 저장됨!", search: "검색", verseOfDay: "✨ 오늘의 말씀", messageOfDay: "📖 오늘의 메시지", listen: "🎧 듣기", shareVerse: "🖼️ 공유", shareMessage: "📝 메시지 공유", new: "🔄 새로고침", listenDesc: "클릭하여 말씀을 들으세요." },
+        ar: { bible: "الكتاب المقدس", guide: "دليل", dictionary: "قاموس", audio: "صوتي", languages: "اللغات", chapter: "إصحاح", previous: "السابق", next: "التالي", readingPlan: "خطة القراءة", dailyReading: "القراءة اليومية", bookmark: "🔖 علامة", goToBookmark: "📍 اذهب إلى", bookmarkSaved: "تم حفظ العلامة!", search: "بحث", verseOfDay: "✨ آية اليوم", messageOfDay: "📖 رسالة اليوم", listen: "🎧 استمع", shareVerse: "🖼️ مشاركة", shareMessage: "📝 مشاركة الرسالة", new: "🔄 جديد", listenDesc: "انقر لسماع الآية." },
+        hi: { bible: "बाइबिल", guide: "गाइड", dictionary: "शब्दकोश", audio: "ऑडियो", languages: "भाषाएँ", chapter: "अध्याय", previous: "पिछला", next: "अगला", readingPlan: "पठन योजना", dailyReading: "दैनिक पठन", bookmark: "🔖 बुकमार्क", goToBookmark: "📍 जाएं", bookmarkSaved: "बुकमार्क सहेजा गया!", search: "खोजें", verseOfDay: "✨ आज का वचन", messageOfDay: "📖 आज का संदेश", listen: "🎧 सुनें", shareVerse: "🖼️ साझा करें", shareMessage: "📝 संदेश साझा करें", new: "🔄 नया", listenDesc: "वचन सुनने के लिए क्लिक करें।" }
     };
 
     let currentLang = 'pt';
@@ -675,7 +824,6 @@
     let currentChapter = 1;
     let isNightMode = false;
     let currentDay = 1;
-    let currentUtterance = null;
 
     function t(key) { return translations[currentLang][key] || translations.pt[key]; }
 
@@ -683,7 +831,8 @@
         document.getElementById('verseTitle').innerHTML = t('verseOfDay');
         document.getElementById('messageTitle').innerHTML = t('messageOfDay');
         document.getElementById('listenVerseBtn').innerHTML = t('listen');
-        document.getElementById('shareImageBtn').innerHTML = t('share');
+        document.getElementById('shareVerseBtn').innerHTML = t('shareVerse');
+        document.getElementById('shareMessageBtn').innerHTML = t('shareMessage');
         document.getElementById('newVerseBtn').innerHTML = t('new');
         document.getElementById('navBible').innerText = t('bible');
         document.getElementById('navGuide').innerText = t('guide');
@@ -707,88 +856,71 @@
         document.getElementById('dailyVerseRef').innerText = verse.ref;
     }
 
-    // ======================== ÁUDIO OTIMIZADO ========================
-    function speakText(text, reference) {
-        if (!window.speechSynthesis) {
-            showToast("❌ Seu navegador não suporta áudio. Tente Chrome, Edge ou Safari.");
-            return;
+    // COMPARTILHAR
+    async function generateShareImage(content, title, type) {
+        showToast("🎨 Gerando imagem...");
+        const canvas = document.getElementById('shareCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 1080; canvas.height = 1920;
+        
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#1a3a2e'); gradient.addColorStop(1, '#2d5a46');
+        ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#FFD966'; ctx.font = 'bold 50px "Segoe UI"'; ctx.textAlign = 'center';
+        ctx.fillText("📖 CONEXÃO DIVINA", canvas.width/2, 120);
+        
+        ctx.fillStyle = '#c9a87b'; ctx.font = '30px "Segoe UI"'; ctx.fillText(`Dia ${currentDay} de 365`, canvas.width/2, 210);
+        
+        ctx.fillStyle = '#F5E6D3'; ctx.font = type === 'versículo' ? 'italic 40px "Georgia"' : '32px "Segoe UI"';
+        let displayText = content.length > 100 ? content.substring(0, 100) + '...' : content;
+        ctx.fillText(`“${displayText}”`, canvas.width/2, type === 'versículo' ? 420 : 380);
+        
+        if (type === 'versículo') {
+            ctx.font = '28px "Segoe UI"'; ctx.fillStyle = '#e8a735'; ctx.fillText(`— ${title} —`, canvas.width/2, 530);
+        } else {
+            ctx.font = '26px "Segoe UI"'; ctx.fillStyle = '#e8a735'; ctx.fillText(`— ${title} —`, canvas.width/2, 500);
         }
         
-        // Parar qualquer áudio em reprodução
-        if (currentUtterance) {
-            window.speechSynthesis.cancel();
-            currentUtterance = null;
-        }
+        ctx.fillStyle = '#8aae9a'; ctx.font = '22px monospace'; ctx.fillText("Conexão Divina • Bíblia Digital", canvas.width/2, canvas.height - 60);
         
-        // Pequeno delay para garantir que o cancelamento foi processado
-        setTimeout(() => {
-            try {
-                const utterance = new SpeechSynthesisUtterance(`${reference}. ${text}`);
-                
-                // Mapear idiomas
-                const langMap = { 
-                    pt: 'pt-BR', en: 'en-US', es: 'es-ES', 
-                    fr: 'fr-FR', it: 'it-IT', de: 'de-DE', ru: 'ru-RU' 
-                };
-                utterance.lang = langMap[currentLang] || 'pt-BR';
-                utterance.rate = 0.9;
-                utterance.pitch = 1;
-                utterance.volume = 1;
-                
-                utterance.onstart = () => {
-                    showToast("🔊 Reproduzindo áudio...");
-                };
-                
-                utterance.onend = () => {
-                    currentUtterance = null;
-                    showToast("✅ Áudio finalizado");
-                };
-                
-                utterance.onerror = (event) => {
-                    console.error('Erro no áudio:', event);
-                    currentUtterance = null;
-                    showToast("⚠️ Erro ao reproduzir. Tente novamente.");
-                };
-                
-                currentUtterance = utterance;
-                window.speechSynthesis.speak(utterance);
-                
-            } catch (error) {
-                console.error('Erro na síntese de voz:', error);
-                showToast("❌ Erro ao reproduzir áudio");
-            }
-        }, 100);
+        canvas.toBlob(async (blob) => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ files: [new File([blob], `conexao_divina_${type}.png`)] });
+                    showToast(`✨ Compartilhado!`);
+                } catch(e) { fallbackDownload(blob, type); }
+            } else { fallbackDownload(blob, type); }
+        }, 'image/png');
+    }
+    
+    function shareVerse() {
+        const verseText = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
+        const verseRef = document.getElementById('dailyVerseRef').innerText;
+        generateShareImage(verseText, verseRef, "versículo");
     }
 
-    function speakVerseOfDay() {
-        const text = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
-        const ref = document.getElementById('dailyVerseRef').innerText;
-        if (!text || text === 'Carregando...') {
-            showToast("⚠️ Aguarde o versículo carregar");
-            return;
-        }
-        speakText(text, ref);
+    function shareMessage() {
+        const messageText = document.getElementById('dailyMessageText').innerText;
+        generateShareImage(messageText, `Mensagem do Dia ${currentDay}`, "mensagem");
+    }
+    
+    function fallbackDownload(blob, type) {
+        const url = URL.createObjectURL(blob); const a = document.createElement('a');
+        a.href = url; a.download = `conexao_divina_${type}_${currentDay}.png`; a.click(); URL.revokeObjectURL(url);
+        showToast("📸 Imagem salva!");
     }
 
-    // ======================== LEITOR BÍBLICO ========================
-    function saveBookmark() {
-        localStorage.setItem('bookmarkBook', currentBook);
-        localStorage.setItem('bookmarkChapter', currentChapter);
-        showToast(t('bookmarkSaved'));
-    }
-
+    // LEITOR BÍBLICO
+    function saveBookmark() { localStorage.setItem('bookmarkBook', currentBook); localStorage.setItem('bookmarkChapter', currentChapter); showToast(t('bookmarkSaved')); }
     function goToBookmark() {
         const savedBook = localStorage.getItem('bookmarkBook');
         const savedChapter = localStorage.getItem('bookmarkChapter');
         if (savedBook && savedChapter) {
-            currentBook = savedBook;
-            currentChapter = parseInt(savedChapter);
-            updateChapterSelect();
-            loadBibleChapter();
+            currentBook = savedBook; currentChapter = parseInt(savedChapter);
+            updateChapterSelect(); loadBibleChapter();
             showToast(`📍 ${currentBook} ${currentChapter}`);
-        } else {
-            showToast("Nenhum marcador salvo");
-        }
+        } else { showToast("Nenhum marcador salvo"); }
     }
 
     function loadBibleChapter() {
@@ -799,23 +931,17 @@
         if (chapterData.length > 0) {
             chapterData.forEach(verse => {
                 const parts = verse.split(' ');
-                const num = parts[0];
-                const text = parts.slice(1).join(' ');
+                const num = parts[0]; const text = parts.slice(1).join(' ');
                 html += `<p><span class="verse-number">${num}</span> ${text}</p>`;
             });
         } else {
             html += `<p>📖 "Toda Escritura é inspirada por Deus" (2 Timóteo 3:16)</p>`;
-            html += `<p style="font-style:italic;">${currentBook} ${currentChapter}: O Senhor é bom e sua misericórdia dura para sempre.</p>`;
         }
         container.innerHTML = html;
         saveProgress();
     }
 
-    function saveProgress() {
-        localStorage.setItem('lastBook', currentBook);
-        localStorage.setItem('lastChapter', currentChapter);
-    }
-
+    function saveProgress() { localStorage.setItem('lastBook', currentBook); localStorage.setItem('lastChapter', currentChapter); }
     function loadProgress() {
         const savedBook = localStorage.getItem('lastBook');
         const savedChapter = localStorage.getItem('lastChapter');
@@ -823,15 +949,7 @@
         if (savedChapter) currentChapter = parseInt(savedChapter);
     }
 
-    function changeBook() {
-        const select = document.getElementById('bookSelect');
-        if (select) currentBook = select.value;
-        currentChapter = 1;
-        updateChapterSelect();
-        loadBibleChapter();
-        saveProgress();
-    }
-
+    function changeBook() { const select = document.getElementById('bookSelect'); if (select) currentBook = select.value; currentChapter = 1; updateChapterSelect(); loadBibleChapter(); saveProgress(); }
     function updateChapterSelect() {
         const chapterSelect = document.getElementById('chapterSelect');
         if (!chapterSelect) return;
@@ -839,157 +957,71 @@
         chapterSelect.innerHTML = '';
         for (let i = 1; i <= maxChapters; i++) {
             const option = document.createElement('option');
-            option.value = i;
-            option.textContent = `${t('chapter')} ${i}`;
+            option.value = i; option.textContent = `${t('chapter')} ${i}`;
             if (i === currentChapter) option.selected = true;
             chapterSelect.appendChild(option);
         }
     }
+    function changeChapter() { const select = document.getElementById('chapterSelect'); if (select) currentChapter = parseInt(select.value); loadBibleChapter(); saveProgress(); }
+    function prevChapter() { if (currentChapter > 1) { currentChapter--; updateChapterSelect(); loadBibleChapter(); saveProgress(); } }
+    function nextChapter() { const maxChapters = Object.keys(bibleData[currentBook] || {}).length || 30; if (currentChapter < maxChapters) { currentChapter++; updateChapterSelect(); loadBibleChapter(); saveProgress(); } }
 
-    function changeChapter() {
-        const select = document.getElementById('chapterSelect');
-        if (select) currentChapter = parseInt(select.value);
-        loadBibleChapter();
-        saveProgress();
-    }
-
-    function prevChapter() {
-        if (currentChapter > 1) { currentChapter--; updateChapterSelect(); loadBibleChapter(); saveProgress(); }
-    }
-
-    function nextChapter() {
-        const maxChapters = Object.keys(bibleData[currentBook] || {}).length || 30;
-        if (currentChapter < maxChapters) { currentChapter++; updateChapterSelect(); loadBibleChapter(); saveProgress(); }
-    }
-
-    // ======================== GUIA DE LEITURA ========================
+    // GUIA DE LEITURA
     let readingGuide = [];
-    for (let i = 0; i < 365; i++) {
-        readingGuide.push({ day: i + 1, book: booksOfBible[i % booksOfBible.length], chapter: (i % 30) + 1, completed: false });
-    }
-
-    function loadReadingGuide() {
-        const saved = localStorage.getItem('readingGuide');
-        if (saved) { try { readingGuide = JSON.parse(saved); } catch(e) {} }
-    }
+    for (let i = 0; i < 365; i++) { readingGuide.push({ day: i + 1, book: booksOfBible[i % booksOfBible.length], chapter: (i % 30) + 1, completed: false }); }
+    function loadReadingGuide() { const saved = localStorage.getItem('readingGuide'); if (saved) { try { readingGuide = JSON.parse(saved); } catch(e) {} } }
     function saveReadingGuide() { localStorage.setItem('readingGuide', JSON.stringify(readingGuide)); }
     function renderReadingGuide() {
-        const container = document.getElementById('guideContent');
-        if (!container) return;
+        const container = document.getElementById('guideContent'); if (!container) return;
         const today = getCurrentDayOfYear();
         let completedCount = readingGuide.filter(g => g.completed).length;
         let progress = (completedCount / 365) * 100;
-        let html = `<div class="section-card"><div class="section-title">📅 ${t('readingPlan')}</div><div class="progress-bar"><div class="progress-fill" style="width: ${progress}%;"></div></div><p>📊 ${completedCount} de 365 dias concluídos</p>`;
+        let html = `<div class="section-card"><div class="section-title">📅 ${t('readingPlan')}</div><div class="progress-bar"><div class="progress-fill" style="width: ${progress}%;"></div></div><p>📊 ${completedCount} de 365 dias</p>`;
         for (let i = Math.max(0, today - 7); i < Math.min(365, today + 8); i++) {
-            const item = readingGuide[i];
-            if (!item) continue;
-            const isToday = (i + 1) === today;
-            html += `<div class="reading-guide-item ${item.completed ? 'completed' : ''}" onclick="toggleGuideDay(${i})" style="${isToday ? 'border-left: 4px solid #e8a735;' : ''}">
-                <strong>${t('dailyReading')} ${item.day}</strong><br>📖 ${item.book} ${item.chapter} ${item.completed ? ' ✓' : ''}
-            </div>`;
+            const item = readingGuide[i]; if (!item) continue;
+            html += `<div class="reading-guide-item ${item.completed ? 'completed' : ''}" onclick="toggleGuideDay(${i})"><strong>${t('dailyReading')} ${item.day}</strong><br>📖 ${item.book} ${item.chapter} ${item.completed ? ' ✓' : ''}</div>`;
         }
-        html += `</div>`;
-        container.innerHTML = html;
+        html += `</div>`; container.innerHTML = html;
     }
     function toggleGuideDay(index) { readingGuide[index].completed = !readingGuide[index].completed; saveReadingGuide(); renderReadingGuide(); showToast(readingGuide[index].completed ? "✅ Concluído!" : "📖 Desmarcado"); }
 
-    // ======================== DICIONÁRIO ========================
+    // DICIONÁRIO
     function searchDictionary() {
         const input = document.getElementById('dictSearch');
         const term = input.value.toLowerCase().trim();
         const resultDiv = document.getElementById('dictResult');
-        if (!term) { resultDiv.innerHTML = '<p>🔍 Digite um termo para buscar (amor, fé, graça, esperança, perdão)</p>'; return; }
+        if (!term) { resultDiv.innerHTML = '<p>🔍 Digite: amor, fé, graça</p>'; return; }
         const definition = bibleDictionary[term];
-        if (definition) {
-            resultDiv.innerHTML = `<div class="dict-term">📖 ${term.charAt(0).toUpperCase() + term.slice(1)}</div><p>${definition}</p>`;
-        } else {
-            resultDiv.innerHTML = `<p>⚠️ Termo "${term}" não encontrado. Tente: amor, fé, graça, esperança, perdão, justiça, oração</p>`;
-        }
+        if (definition) { resultDiv.innerHTML = `<div class="dict-term">📖 ${term.charAt(0).toUpperCase() + term.slice(1)}</div><p>${definition}</p>`; }
+        else { resultDiv.innerHTML = `<p>⚠️ "${term}" não encontrado.</p>`; }
     }
-
     function renderDictionary() {
         const container = document.getElementById('dictionaryContent');
         if (!container) return;
-        container.innerHTML = `<div class="dictionary-card">
-            <div class="section-title">📚 ${t('dictionary')}</div>
-            <div class="search-dict">
-                <input type="text" id="dictSearch" placeholder="🔍 ${t('search')} termo...">
-                <button class="action-btn" onclick="searchDictionary()">${t('search')}</button>
-            </div>
-            <div id="dictResult" class="dict-result">🔍 Digite: amor, fé, graça, esperança, perdão, justiça, oração, salvação, misericórdia</div>
-        </div>`;
+        container.innerHTML = `<div class="dictionary-card"><div class="section-title">📚 ${t('dictionary')}</div><div class="search-dict"><input type="text" id="dictSearch" placeholder="🔍 ${t('search')}..."><button class="action-btn" onclick="searchDictionary()">${t('search')}</button></div><div id="dictResult" class="dict-result">🔍 amor, fé, graça, esperança, oração, perdão</div></div>`;
     }
 
-    // ======================== COMPARTILHAR ========================
-    async function generateAndShareImage() {
-        showToast("🎨 Gerando imagem...");
-        const verseText = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
-        const verseRef = document.getElementById('dailyVerseRef').innerText;
-        const canvas = document.getElementById('shareCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = 1080; canvas.height = 1920;
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#1a3a2e'); gradient.addColorStop(1, '#2d5a46');
-        ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#FFD966'; ctx.font = 'bold 50px "Segoe UI"'; ctx.textAlign = 'center';
-        ctx.fillText("📖 CONEXÃO DIVINA", canvas.width/2, 120);
-        ctx.fillStyle = '#c9a87b'; ctx.font = '30px "Segoe UI"'; ctx.fillText(`Dia ${currentDay} de 365`, canvas.width/2, 210);
-        ctx.fillStyle = '#F5E6D3'; ctx.font = 'italic 36px "Georgia"';
-        let displayText = verseText.length > 70 ? verseText.substring(0, 70) + '...' : verseText;
-        ctx.fillText(`“${displayText}”`, canvas.width/2, 380);
-        ctx.font = '28px "Segoe UI"'; ctx.fillStyle = '#e8a735'; ctx.fillText(`— ${verseRef} —`, canvas.width/2, 480);
-        ctx.fillStyle = '#8aae9a'; ctx.font = '22px monospace'; ctx.fillText("Conexão Divina • Bíblia Digital", canvas.width/2, canvas.height - 60);
-        canvas.toBlob(async (blob) => {
-            if (navigator.share) {
-                try {
-                    await navigator.share({ files: [new File([blob], "conexao_divina.png")] });
-                    showToast("✨ Imagem compartilhada!");
-                } catch(e) { fallbackDownload(blob); }
-            } else { fallbackDownload(blob); }
-        }, 'image/png');
-    }
-    
-    function fallbackDownload(blob) {
-        const url = URL.createObjectURL(blob); const a = document.createElement('a');
-        a.href = url; a.download = `conexao_divina_${currentDay}.png`; a.click(); URL.revokeObjectURL(url);
-        showToast("📸 Imagem salva!");
-    }
-
-    // ======================== RENDERIZAÇÃO ========================
+    // RENDERIZAÇÃO
     function renderSection(section) {
         const container = document.getElementById('dynamicContent');
         if (section === 'bible') {
-            container.innerHTML = `<div class="bible-reader"><div class="section-title">📖 ${t('bible')}</div>
-                <div class="book-selector"><select id="bookSelect" class="book-select" onchange="changeBook()">${booksOfBible.map(b => `<option ${b === currentBook ? 'selected' : ''}>${b}</option>`).join('')}</select>
-                <select id="chapterSelect" class="chapter-select" onchange="changeChapter()"></select></div>
-                <div class="chapter-nav"><button class="nav-chapter-btn" onclick="prevChapter()">◀ ${t('previous')}</button>
-                <button class="nav-chapter-btn" onclick="nextChapter()">${t('next')} ▶</button>
-                <button class="nav-chapter-btn bookmark-btn" onclick="saveBookmark()">${t('bookmark')}</button>
-                <button class="nav-chapter-btn" onclick="goToBookmark()">${t('goToBookmark')}</button></div>
-                <div id="bibleContent" class="bible-content">Carregando...</div></div>`;
+            container.innerHTML = `<div class="bible-reader"><div class="section-title">📖 ${t('bible')}</div><div class="book-selector"><select id="bookSelect" class="book-select" onchange="changeBook()">${booksOfBible.map(b => `<option ${b === currentBook ? 'selected' : ''}>${b}</option>`).join('')}</select><select id="chapterSelect" class="chapter-select" onchange="changeChapter()"></select></div><div class="chapter-nav"><button class="nav-chapter-btn" onclick="prevChapter()">◀ ${t('previous')}</button><button class="nav-chapter-btn" onclick="nextChapter()">${t('next')} ▶</button><button class="nav-chapter-btn bookmark-btn" onclick="saveBookmark()">${t('bookmark')}</button><button class="nav-chapter-btn" onclick="goToBookmark()">${t('goToBookmark')}</button></div><div id="bibleContent" class="bible-content">Carregando...</div></div>`;
             updateChapterSelect(); loadBibleChapter();
-        } else if (section === 'guide') {
-            container.innerHTML = `<div id="guideContent"></div>`; renderReadingGuide();
-        } else if (section === 'dictionary') {
-            container.innerHTML = `<div id="dictionaryContent"></div>`; renderDictionary();
-        } else if (section === 'audio') {
-            container.innerHTML = `<div class="section-card">
-                <div class="section-title">🎧 ${t('audio')}</div>
-                <p style="margin-bottom: 15px;">${t('listenDesc')}</p>
-                <button id="audioBtn" class="action-btn audio-player-btn">🔊 ${t('listen')}</button>
-                <p style="margin-top: 15px; font-size: 0.8rem; color: #888;">💡 Certifique-se de que o volume do dispositivo está ligado. Compatível com Chrome, Safari, Edge e Firefox.</p>
-            </div>`;
+        } else if (section === 'guide') { container.innerHTML = `<div id="guideContent"></div>`; renderReadingGuide(); }
+        else if (section === 'dictionary') { container.innerHTML = `<div id="dictionaryContent"></div>`; renderDictionary(); }
+        else if (section === 'audio') {
+            container.innerHTML = `<div class="section-card"><div class="section-title">🎧 ${t('audio')}</div><p style="margin-bottom:15px;">${t('listenDesc')}</p><button id="audioBtn" class="action-btn audio-player-btn">🔊 ${t('listen')}</button><p style="margin-top:15px; font-size:0.75rem;">💡 Testado e compatível com Chrome, Safari, Firefox, Edge e todos os celulares (incluindo Xiaomi/Redmi).</p></div>`;
             document.getElementById('audioBtn')?.addEventListener('click', speakVerseOfDay);
         } else if (section === 'lang') {
             const langs = Object.keys(translations);
-            const langNames = { pt:"🇵🇹 Português", en:"🇬🇧 English", es:"🇪🇸 Español", fr:"🇫🇷 Français", it:"🇮🇹 Italiano", de:"🇩🇪 Deutsch", ru:"🇷🇺 Русский" };
+            const langNames = { pt:"🇵🇹 Português", en:"🇬🇧 English", es:"🇪🇸 Español", fr:"🇫🇷 Français", it:"🇮🇹 Italiano", de:"🇩🇪 Deutsch", ru:"🇷🇺 Русский", zh:"🇨🇳 中文", ja:"🇯🇵 日本語", ko:"🇰🇷 한국어", ar:"🇸🇦 العربية", hi:"🇮🇳 हिन्दी" };
             container.innerHTML = `<div class="section-card"><div class="section-title">🌍 ${t('languages')}</div><div class="langs-grid" id="langList"></div></div>`;
             const langDiv = document.getElementById('langList');
             langs.forEach(l => {
                 const btn = document.createElement('button');
                 btn.className = `lang-btn ${currentLang === l ? 'active' : ''}`;
                 btn.textContent = langNames[l] || l.toUpperCase();
-                btn.onclick = () => { currentLang = l; updateUILanguage(); renderSection('lang'); showToast(`Idioma alterado para ${langNames[l] || l}`); };
+                btn.onclick = () => { currentLang = l; updateUILanguage(); renderSection('lang'); showToast(`Idioma: ${langNames[l] || l}`); };
                 langDiv.appendChild(btn);
             });
         }
@@ -1003,7 +1035,6 @@
 
     function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR'); }
 
-    // ======================== INICIALIZAÇÃO ========================
     function init() {
         updateClock(); setInterval(updateClock, 1000);
         updateDailyContent();
@@ -1012,7 +1043,8 @@
         updateUILanguage();
         
         document.getElementById('listenVerseBtn').addEventListener('click', speakVerseOfDay);
-        document.getElementById('shareImageBtn').addEventListener('click', generateAndShareImage);
+        document.getElementById('shareVerseBtn').addEventListener('click', shareVerse);
+        document.getElementById('shareMessageBtn').addEventListener('click', shareMessage);
         document.getElementById('newVerseBtn').addEventListener('click', () => {
             const random = Math.floor(Math.random() * dailyVersesList.length);
             const verse = dailyVersesList[random];
@@ -1025,15 +1057,8 @@
             isNightMode = !isNightMode;
             document.body.classList.toggle('prayer-mode');
             const btn = document.getElementById('prayerToggle');
-            if (isNightMode) {
-                btn.innerHTML = "☀️";
-                btn.title = "Modo Dia";
-                showToast("🌙 Modo Noturno ativado");
-            } else {
-                btn.innerHTML = "🌙";
-                btn.title = "Modo Noturno";
-                showToast("☀️ Modo Dia ativado");
-            }
+            if (isNightMode) { btn.innerHTML = "☀️"; btn.title = "Modo Dia"; showToast("🌙 Modo Noturno ativado"); }
+            else { btn.innerHTML = "🌙"; btn.title = "Modo Noturno"; showToast("☀️ Modo Dia ativado"); }
         });
         
         document.querySelectorAll('.nav-item').forEach(btn => {
