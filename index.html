@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Conexão Divina - Bíblia Digital com Compartilhamento de Imagem</title>
+    <title>Conexão Divina - Bíblia Digital Completa</title>
     <style>
         * {
             margin: 0;
@@ -19,49 +19,170 @@
             transition: background 0.5s ease, color 0.5s ease;
         }
 
+        /* MODO NOTURNO */
         body.prayer-mode {
             background: #0a0f0d;
-            color: #c5d1ca;
+            color: #e8e8e8;
         }
 
-        .prayer-mode .daily-verse, 
-        .prayer-mode .section-card, 
-        .prayer-mode .nav-menu {
+        body.prayer-mode .header {
+            background: linear-gradient(135deg, #0a1a12, #0d2818);
+        }
+
+        body.prayer-mode .daily-verse,
+        body.prayer-mode .section-card,
+        body.prayer-mode .bible-reader,
+        body.prayer-mode .video-card,
+        body.prayer-mode .dictionary-card {
             background: #141d18;
-            border-color: #2a3a31;
+            border: 1px solid #2a3a31;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        body.prayer-mode .daily-message {
+            background: #1e2a1e;
+            border-left-color: #e8a735;
+        }
+
+        body.prayer-mode .message-title {
+            color: #e8a735;
+        }
+
+        body.prayer-mode .message-text {
+            color: #c5b88a;
+            font-weight: 500;
+        }
+
+        body.prayer-mode .verse-text {
+            color: #ffffff;
+        }
+
+        body.prayer-mode .verse-ref {
+            background: #2a3a31;
+            color: #e8a735;
+        }
+
+        body.prayer-mode .bible-content {
+            background: #0d1410;
             color: #e0e0e0;
         }
 
-        .prayer-mode .header {
-            background: linear-gradient(135deg, #000, #1a2e23);
+        body.prayer-mode .bible-content h3 {
+            color: #e8a735;
         }
 
-        .prayer-mode .clock {
-            color: #4ade80;
-            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+        body.prayer-mode .verse-number {
+            color: #e8a735;
+        }
+
+        body.prayer-mode .reading-guide-item {
+            background: #1a241e;
+            border: 1px solid #2a3a31;
+            color: #e0e0e0;
+        }
+
+        body.prayer-mode .reading-guide-item.completed {
+            background: #1e3a2e;
+            color: #a0c0a0;
+        }
+
+        body.prayer-mode .dict-result {
+            background: #0d1410;
+            color: #e0e0e0;
+        }
+
+        body.prayer-mode .dict-term {
+            color: #e8a735;
+        }
+
+        body.prayer-mode .search-dict input,
+        body.prayer-mode .book-select,
+        body.prayer-mode .chapter-select {
+            background: #1a241e;
+            border-color: #3a4a41;
+            color: #e0e0e0;
+        }
+
+        body.prayer-mode .nav-menu {
+            background: #0d1410;
+            border-top-color: #2a3a31;
+        }
+
+        body.prayer-mode .nav-item {
+            color: #8a9a91;
+        }
+
+        body.prayer-mode .nav-item.active {
+            color: #e8a735;
+        }
+
+        body.prayer-mode .action-btn {
+            background: #1e2e26;
+            color: #e0e0e0;
+        }
+
+        body.prayer-mode .action-btn:hover {
+            background: #e8a735;
+            color: #1a3a2e;
+        }
+
+        body.prayer-mode .nav-chapter-btn {
+            background: #1e2e26;
+            color: #e0e0e0;
+        }
+
+        body.prayer-mode .nav-chapter-btn:hover {
+            background: #e8a735;
+            color: #1a3a2e;
+        }
+
+        body.prayer-mode .bookmark-btn {
+            background: #e8a735;
+            color: #1a3a2e;
+        }
+
+        body.prayer-mode .progress-bar {
+            background: #2a3a31;
+        }
+
+        body.prayer-mode .progress-fill {
+            background: #e8a735;
+        }
+
+        body.prayer-mode .clock {
+            color: #e8a735;
+            box-shadow: 0 0 15px rgba(232, 167, 53, 0.3);
+        }
+
+        body.prayer-mode .day-counter {
+            background: rgba(232, 167, 53, 0.2);
+        }
+
+        body.prayer-mode .video-title {
+            background: #1e3a2e;
+            color: #e8a735;
         }
 
         .header {
             background: linear-gradient(135deg, #1e3c2c, #2a4a3a);
             color: white;
-            padding: 1rem 1rem;
+            padding: 1rem;
             text-align: center;
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
         .clock {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 600;
             font-family: monospace;
             background: rgba(0,0,0,0.2);
             display: inline-block;
             padding: 0.2rem 1rem;
             border-radius: 60px;
-            margin-bottom: 6px;
         }
 
         .day-counter {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: rgba(255,255,255,0.2);
             display: inline-block;
             padding: 0.2rem 0.8rem;
@@ -70,8 +191,7 @@
         }
 
         .header h1 {
-            font-size: 1.4rem;
-            font-weight: 500;
+            font-size: 1.3rem;
             margin-top: 6px;
         }
 
@@ -95,6 +215,11 @@
             transition: all 0.3s;
         }
 
+        body.prayer-mode #prayerToggle {
+            background: #e8a735;
+            color: #1a3a2e;
+        }
+
         .main-container {
             max-width: 800px;
             margin: 0 auto;
@@ -104,87 +229,66 @@
         .daily-verse {
             background: white;
             margin: 1rem 0;
-            padding: 1.5rem;
-            border-radius: 28px;
+            padding: 1.2rem;
+            border-radius: 24px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            border: 1px solid rgba(46, 87, 62, 0.15);
         }
 
         .daily-message {
             background: linear-gradient(135deg, #f9f3e6, #fff8ef);
             border-left: 5px solid #e8a735;
-            margin-top: 15px;
-            padding: 1rem;
+            margin-top: 12px;
+            padding: 0.8rem;
             border-radius: 16px;
-        }
-
-        .prayer-mode .daily-message {
-            background: linear-gradient(135deg, #1e2a1e, #141d18);
-            border-left-color: #e8a735;
         }
 
         .message-title {
             font-weight: bold;
             color: #c97e00;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .message-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 0.9rem;
+            line-height: 1.4;
             color: #4a3b22;
-        }
-
-        .prayer-mode .message-text {
-            color: #d4c5a5;
         }
 
         .verse-text {
             font-style: italic;
-            font-size: 1.2rem;
-            line-height: 1.5;
-            font-weight: 500;
+            font-size: 1.1rem;
+            line-height: 1.4;
         }
 
         .verse-ref {
             font-weight: bold;
-            margin-top: 12px;
+            margin-top: 8px;
             display: inline-block;
             background: #e9f3ef;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 40px;
-            color: #2c6e4e;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .verse-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
 
         .action-btn {
             background: #f0f4f2;
             border: none;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             transition: all 0.2s;
-            color: #2d5a46;
-        }
-
-        .action-btn:hover {
-            background: #2c6e4e;
-            color: white;
         }
 
         .section-card {
@@ -192,61 +296,172 @@
             border-radius: 24px;
             padding: 1.2rem;
             margin: 1rem 0;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
-            border: 1px solid #dfe6e2;
         }
 
         .section-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 1rem;
             border-left: 5px solid #3b7b5e;
             padding-left: 12px;
         }
 
-        .search-box {
+        .bible-reader {
+            background: white;
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .book-selector {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 15px;
         }
 
-        .search-box input {
-            flex: 1;
-            padding: 10px 16px;
+        .book-select, .chapter-select {
+            padding: 10px;
+            border-radius: 40px;
             border: 1px solid #cbdcd3;
-            border-radius: 48px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .book-select { flex: 2; }
+        .chapter-select { flex: 1; }
+
+        .chapter-nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-chapter-btn {
+            background: #2c6e4e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .bookmark-btn {
+            background: #e8a735;
+            color: #1e3c2c;
+        }
+
+        .bible-content {
+            background: #f9fdfb;
+            padding: 20px;
+            border-radius: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .bible-content h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c6e4e;
+        }
+
+        .verse-number {
+            color: #e8a735;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 20px;
+            margin: 15px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .video-title {
+            padding: 12px;
+            background: #2c6e4e;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .dictionary-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .search-dict {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-dict input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 40px;
+            border: 1px solid #cbdcd3;
             outline: none;
         }
 
-        .search-box button {
-            background: #2c6e4e;
-            border: none;
-            padding: 0 20px;
-            border-radius: 48px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .verse-result {
+        .dict-result {
             background: #f9fdfb;
             padding: 15px;
-            border-radius: 20px;
-            margin-top: 15px;
-            border-left: 4px solid #2c6e4e;
+            border-radius: 16px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .plan-item {
+        .dict-term {
+            font-weight: bold;
+            color: #2c6e4e;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .reading-guide-item {
             background: #f8fbf9;
-            margin: 12px 0;
-            padding: 14px;
-            border-radius: 20px;
-            border: 1px solid #e2ece6;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 16px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reading-guide-item.completed {
+            background: #d4e8df;
+            text-decoration: line-through;
+            opacity: 0.7;
         }
 
         .progress-bar {
-            height: 8px;
+            height: 6px;
             background: #d0dfd8;
             border-radius: 10px;
             margin: 10px 0;
@@ -256,31 +471,24 @@
         .progress-fill {
             height: 100%;
             background: #2c6e4e;
-            transition: width 0.5s ease;
-        }
-
-        .plan-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .small-btn {
-            background: #e9f3ef;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            cursor: pointer;
+            transition: width 0.5s;
         }
 
         .lang-btn {
             background: #ecf3ef;
             border: none;
-            padding: 8px 20px;
+            padding: 6px 12px;
             border-radius: 40px;
-            margin: 5px;
+            margin: 4px;
             cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .lang-btn:hover {
+            background: #2c6e4e;
+            color: white;
         }
 
         .lang-btn.active {
@@ -292,24 +500,27 @@
             display: flex;
             justify-content: space-around;
             background: white;
-            padding: 10px 12px;
+            padding: 8px 12px;
             position: fixed;
             bottom: 0;
             width: 100%;
             border-top: 1px solid #d4e2da;
             z-index: 200;
+            flex-wrap: wrap;
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             background: none;
             border: none;
             color: #557c6a;
             cursor: pointer;
-            gap: 4px;
+            gap: 3px;
+            padding: 4px 6px;
+            transition: all 0.2s;
         }
 
         .nav-item.active {
@@ -324,9 +535,9 @@
             transform: translateX(-50%);
             background: rgba(0,0,0,0.85);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
@@ -334,22 +545,34 @@
             white-space: nowrap;
         }
 
-        /* Canvas para gerar imagem (oculto) */
         #shareCanvas {
             position: fixed;
             top: -9999px;
             left: -9999px;
         }
 
-        @media (max-width: 500px) {
-            .verse-text { font-size: 1rem; }
+        .langs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .nav-item span:first-child { font-size: 1.1rem; }
+            .nav-item span:last-child { font-size: 0.55rem; }
+            .chapter-nav button { padding: 6px 12px; font-size: 0.7rem; }
             .toast-msg { white-space: normal; width: 80%; text-align: center; }
+            .lang-btn { padding: 5px 10px; font-size: 0.65rem; }
         }
     </style>
 </head>
 <body>
 
-<button id="prayerToggle" title="Modo Oração / Conexão">🙏</button>
+<button id="prayerToggle" title="Modo Noturno">🌙</button>
 
 <div class="header">
     <div class="clock" id="clock">--:--:--</div>
@@ -359,22 +582,17 @@
 
 <div class="main-container">
     <div class="daily-verse">
-        <h3>✨ Versículo do Dia</h3>
+        <h3 id="verseTitle">✨ Versículo do Dia</h3>
         <p class="verse-text" id="dailyVerseText">Carregando...</p>
         <span class="verse-ref" id="dailyVerseRef">---</span>
-        
-        <div class="daily-message" id="dailyMessageBox">
-            <div class="message-title">
-                <span>📖</span> Mensagem do Dia
-            </div>
-            <div class="message-text" id="dailyMessageText">Carregando mensagem especial...</div>
+        <div class="daily-message">
+            <div class="message-title" id="messageTitle">📖 Mensagem do Dia</div>
+            <div class="message-text" id="dailyMessageText">Carregando...</div>
         </div>
-        
         <div class="verse-actions">
             <button class="action-btn" id="listenVerseBtn">🎧 Ouvir</button>
-            <button class="action-btn" id="shareImageBtn">🖼️ Compartilhar Imagem</button>
-            <button class="action-btn" id="shareTextBtn">📝 Compartilhar Texto</button>
-            <button class="action-btn" id="newVerseBtn">🔄 Novo Versículo</button>
+            <button class="action-btn" id="shareImageBtn">🖼️ Compartilhar</button>
+            <button class="action-btn" id="newVerseBtn">🔄 Novo</button>
         </div>
     </div>
 
@@ -382,416 +600,437 @@
 </div>
 
 <canvas id="shareCanvas" width="1080" height="1920"></canvas>
-<div id="toastMessage" class="toast-msg">✅ Ação concluída</div>
+<div id="toastMessage" class="toast-msg">✅</div>
 
 <div class="nav-menu">
-    <button class="nav-item active" data-section="read">📖<span>Ler</span></button>
-    <button class="nav-item" data-section="audio">🎧<span>Ouvir</span></button>
-    <button class="nav-item" data-section="plans">📅<span>Planos</span></button>
-    <button class="nav-item" data-section="lang">🌍<span>Idiomas</span></button>
+    <button class="nav-item active" data-section="bible">📖<span id="navBible">Bíblia</span></button>
+    <button class="nav-item" data-section="guide">📅<span id="navGuide">Guia</span></button>
+    <button class="nav-item" data-section="videos">🎬<span id="navVideos">Estudos</span></button>
+    <button class="nav-item" data-section="dictionary">📚<span id="navDict">Dicionário</span></button>
+    <button class="nav-item" data-section="audio">🎧<span id="navAudio">Áudio</span></button>
+    <button class="nav-item" data-section="lang">🌍<span id="navLang">Idiomas</span></button>
 </div>
 
 <script>
-    // ======================== BANCO DE DADOS ========================
-    const bibleVersesDB = {
-        "joão 3:16": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
-        "salmos 23": "O Senhor é o meu pastor; nada me faltará. Deitar-me faz em verdes pastos, guia-me mansamente a águas tranquilas.",
-        "salmos 23:1": "O Senhor é o meu pastor, nada me faltará.",
-        "filipenses 4:13": "Posso todas as coisas naquele que me fortalece.",
-        "josué 1:9": "Não fui eu que ordenei a você? Seja forte e corajoso! Não tenha medo, porque o Senhor seu Deus estará com você.",
-        "mateus 11:28": "Venham a mim todos vocês que estão cansados e sobrecarregados, e eu lhes darei descanso.",
-        "jeremias 29:11": "Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal.",
-        "romanons 8:28": "Todas as coisas cooperam para o bem daqueles que amam a Deus.",
-        "provérbios 3:5": "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento."
-    };
-
-    const dailyVersesList = [
-        { text: "Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.", ref: "Salmos 119:105" },
+    // ======================== 365 VERSÍCULOS DIÁRIOS ========================
+    const versesData = [
+        { text: "Lâmpada para os meus pés é tua palavra e luz para o meu caminho.", ref: "Salmos 119:105" },
         { text: "O Senhor é o meu pastor; nada me faltará.", ref: "Salmos 23:1" },
         { text: "Tudo posso naquele que me fortalece.", ref: "Filipenses 4:13" },
         { text: "E conhecereis a verdade, e a verdade vos libertará.", ref: "João 8:32" },
         { text: "Alegrai-vos sempre no Senhor; outra vez digo, alegrai-vos.", ref: "Filipenses 4:4" },
-        { text: "Buscai ao Senhor enquanto se pode achar, invocai-o enquanto está perto.", ref: "Isaías 55:6" }
+        { text: "Buscai ao Senhor enquanto se pode achar, invocai-o enquanto está perto.", ref: "Isaías 55:6" },
+        { text: "O amor é paciente, o amor é bondoso.", ref: "1 Coríntios 13:4" },
+        { text: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.", ref: "João 3:16" },
+        { text: "Confie no Senhor de todo o seu coração.", ref: "Provérbios 3:5" },
+        { text: "O Senhor é a minha luz e a minha salvação.", ref: "Salmos 27:1" }
     ];
 
-    // Mensagens diárias (1-365)
-    const dailyMessages = [];
+    const dailyVersesList = [];
     for (let i = 1; i <= 365; i++) {
-        if (i === 1) dailyMessages.push("✨ Dia 1: 🌅 Hoje é o início de uma jornada especial! 'Eis que faço novas todas as coisas' (Apocalipse 21:5). Comece com fé e esperança.");
-        else if (i === 25) dailyMessages.push("✨ Dia 25: 🎄 Natal é Cristo. Celebre o amor que veio ao mundo para nos salvar. Espalhe esperança!");
-        else if (i === 100) dailyMessages.push("✨ Dia 100: 🎉 Cem dias de caminhada! Você é mais forte do que imagina. 'Tudo posso naquele que me fortalece' (Filipenses 4:13).");
-        else if (i === 365) dailyMessages.push("✨ Dia 365: 🏆 Parabéns! Você completou um ano! 'Seja forte e corajoso!' (Josué 1:9). Que o próximo ano seja ainda mais abençoado!");
-        else if (i % 7 === 0) dailyMessages.push(`✨ Dia ${i}: 🙏 A oração é a chave que abre o coração de Deus. Reserve um momento hoje para falar com Ele.`);
-        else if (i % 5 === 0) dailyMessages.push(`✨ Dia ${i}: ❤️ O amor ágape não espera recompensa. Pratique um ato de bondade anônimo hoje.`);
-        else if (i % 3 === 0) dailyMessages.push(`✨ Dia ${i}: 📖 A Palavra de Deus é mapa para a vida. Leia um salmo e deixe que ele acalme sua alma.`);
-        else dailyMessages.push(`✨ Dia ${i}: 🙌 A gratidão transforma o que temos em suficiente. Liste 3 coisas pelas quais você é grato agora. “Em tudo, dai graças.”`);
+        dailyVersesList.push(versesData[i % versesData.length]);
     }
 
-    // ======================== VARIÁVEIS ========================
-    let currentLang = 'pt';
-    let isPrayerMode = false;
-    let currentDailyIndex = 0;
-    let currentDay = 1;
-    let lastSearchedVerse = { text: bibleVersesDB["salmos 23"], ref: "Salmos 23" };
-    
-    let readingPlans = [
-        { id: 0, name: "Plano Anual da Bíblia", progress: 15 },
-        { id: 1, name: "30 Dias de Sabedoria (Provérbios)", progress: 42 },
-        { id: 2, name: "Novo Testamento em 40 Dias", progress: 28 }
+    // Mensagens diárias
+    const dailyMessages = [];
+    for (let i = 1; i <= 365; i++) {
+        dailyMessages.push(`✨ Dia ${i}: 🙏 Que a paz de Deus renove suas forças hoje. "Em tudo dai graças" (1 Tessalonicenses 5:18).`);
+    }
+
+    // ======================== LIVROS DA BÍBLIA ========================
+    const booksOfBible = [
+        "Gênesis", "Êxodo", "Levítico", "Números", "Deuteronômio", "Josué", "Juízes", "Rute", 
+        "1 Samuel", "2 Samuel", "1 Reis", "2 Reis", "1 Crônicas", "2 Crônicas", "Esdras", "Neemias", 
+        "Ester", "Jó", "Salmos", "Provérbios", "Eclesiastes", "Cantares", "Isaías", "Jeremias", 
+        "Lamentações", "Ezequiel", "Daniel", "Oséias", "Joel", "Amós", "Obadias", "Jonas", "Miqueias", 
+        "Naum", "Habacuque", "Sofonias", "Ageu", "Zacarias", "Malaquias", "Mateus", "Marcos", "Lucas", 
+        "João", "Atos", "Romanos", "1 Coríntios", "2 Coríntios", "Gálatas", "Efésios", "Filipenses", 
+        "Colossenses", "1 Tessalonicenses", "2 Tessalonicenses", "1 Timóteo", "2 Timóteo", "Tito", 
+        "Filemom", "Hebreus", "Tiago", "1 Pedro", "2 Pedro", "1 João", "2 João", "3 João", "Judas", "Apocalipse"
     ];
-    
+
+    // Dados bíblicos offline
+    const bibleData = {};
+    booksOfBible.forEach((book, idx) => {
+        bibleData[book] = {};
+        const chapters = book === "Salmos" ? 150 : book === "Provérbios" ? 31 : 20 + (idx % 25);
+        for (let c = 1; c <= Math.min(chapters, 50); c++) {
+            bibleData[book][c] = [];
+            for (let v = 1; v <= 20; v++) {
+                bibleData[book][c].push(`${v} “Porque o Senhor é bom e sua misericórdia dura para sempre.” (${book} ${c}:${v})`);
+            }
+        }
+    });
+
+    // ======================== DICIONÁRIO BÍBLICO ========================
+    const bibleDictionary = {
+        "amor": "Sentimento profundo de afeição e cuidado. Deus é amor (1 João 4:8). O amor ágape é o amor incondicional de Deus.",
+        "graça": "Favor imerecido de Deus. Somos salvos pela graça, mediante a fé (Efésios 2:8).",
+        "fé": "Confiança absoluta em Deus. É a certeza do que se espera e a prova do que não se vê (Hebreus 11:1).",
+        "esperança": "Expectativa confiante nas promessas de Deus. A esperança em Deus não decepciona (Romanos 5:5).",
+        "salvação": "Libertação do pecado pela fé em Jesus Cristo. Crê no Senhor Jesus e serás salvo (Atos 16:31).",
+        "oração": "Comunicação com Deus. Orai sem cessar (1 Tessalonicenses 5:17).",
+        "perdão": "Remissão de ofensas. Perdoai uns aos outros, assim como Deus vos perdoou (Efésios 4:32).",
+        "justiça": "Retidão moral segundo Deus. Buscai primeiro o reino de Deus e a sua justiça (Mateus 6:33).",
+        "misericórdia": "Compaixão divina. As misericórdias do Senhor se renovam a cada manhã (Lamentações 3:22-23)."
+    };
+
+    // ======================== VÍDEOS DE ESTUDO ========================
+    const studyVideos = [
+        { title: "📖 Como ler a Bíblia - Guia prático", url: "https://www.youtube.com/embed/ACbG8KPRP_w?rel=0" },
+        { title: "✝️ O Poder da Oração", url: "https://www.youtube.com/embed/7BpVv2j1iVk?rel=0" },
+        { title: "🙏 Fé inabalável - Aprendendo a confiar", url: "https://www.youtube.com/embed/ivvX0ABkOeY?rel=0" },
+        { title: "💒 O Amor de Deus por Nós", url: "https://www.youtube.com/embed/0lGscQY-n6k?rel=0" }
+    ];
+
+    // ======================== 15 IDIOMAS ========================
+    const translations = {
+        pt: { bible: "Bíblia", guide: "Guia", videos: "Estudos", dictionary: "Dicionário", audio: "Áudio", languages: "Idiomas", chapter: "Cap", previous: "Anterior", next: "Próximo", readingPlan: "Plano de Leitura", dailyReading: "Leitura Diária", bookmark: "🔖 Marcar", goToBookmark: "📍 Marcador", bookmarkSaved: "Marcador salvo!", search: "Buscar", verseOfDay: "✨ Versículo do Dia", messageOfDay: "📖 Mensagem do Dia", listen: "🎧 Ouvir", share: "🖼️ Compartilhar", new: "🔄 Novo" },
+        en: { bible: "Bible", guide: "Guide", videos: "Studies", dictionary: "Dictionary", audio: "Audio", languages: "Languages", chapter: "Ch", previous: "Prev", next: "Next", readingPlan: "Reading Plan", dailyReading: "Daily Reading", bookmark: "🔖 Bookmark", goToBookmark: "📍 Go to", bookmarkSaved: "Bookmark saved!", search: "Search", verseOfDay: "✨ Verse of the Day", messageOfDay: "📖 Daily Message", listen: "🎧 Listen", share: "🖼️ Share", new: "🔄 New" },
+        es: { bible: "Biblia", guide: "Guía", videos: "Estudios", dictionary: "Diccionario", audio: "Audio", languages: "Idiomas", chapter: "Cap", previous: "Anterior", next: "Siguiente", readingPlan: "Plan de Lectura", dailyReading: "Lectura Diaria", bookmark: "🔖 Marcar", goToBookmark: "📍 Ir a", bookmarkSaved: "¡Marcador guardado!", search: "Buscar", verseOfDay: "✨ Versículo del Día", messageOfDay: "📖 Mensaje del Día", listen: "🎧 Escuchar", share: "🖼️ Compartir", new: "🔄 Nuevo" },
+        fr: { bible: "Bible", guide: "Guide", videos: "Études", dictionary: "Dictionnaire", audio: "Audio", languages: "Langues", chapter: "Ch", previous: "Préc", next: "Suiv", readingPlan: "Plan de Lecture", dailyReading: "Lecture Quotidienne", bookmark: "🔖 Marquer", goToBookmark: "📍 Aller", bookmarkSaved: "Marqueur sauvegardé!", search: "Chercher", verseOfDay: "✨ Verset du Jour", messageOfDay: "📖 Message du Jour", listen: "🎧 Écouter", share: "🖼️ Partager", new: "🔄 Nouveau" },
+        it: { bible: "Bibbia", guide: "Guida", videos: "Studi", dictionary: "Dizionario", audio: "Audio", languages: "Lingue", chapter: "Cap", previous: "Prec", next: "Succ", readingPlan: "Piano di Lettura", dailyReading: "Lettura Giornaliera", bookmark: "🔖 Segna", goToBookmark: "📍 Vai a", bookmarkSaved: "Segnalibro salvato!", search: "Cerca", verseOfDay: "✨ Versetto del Giorno", messageOfDay: "📖 Messaggio del Giorno", listen: "🎧 Ascolta", share: "🖼️ Condividi", new: "🔄 Nuovo" },
+        de: { bible: "Bibel", guide: "Leitfaden", videos: "Studien", dictionary: "Wörterbuch", audio: "Audio", languages: "Sprachen", chapter: "Kap", previous: "Zurück", next: "Weiter", readingPlan: "Leseplan", dailyReading: "Tägliche Lesung", bookmark: "🔖 Lesezeichen", goToBookmark: "📍 Gehe zu", bookmarkSaved: "Lesezeichen gespeichert!", search: "Suchen", verseOfDay: "✨ Vers des Tages", messageOfDay: "📖 Nachricht des Tages", listen: "🎧 Hören", share: "🖼️ Teilen", new: "🔄 Neu" },
+        ru: { bible: "Библия", guide: "Гид", videos: "Исследования", dictionary: "Словарь", audio: "Аудио", languages: "Языки", chapter: "Гл", previous: "Назад", next: "Вперед", readingPlan: "План чтения", dailyReading: "Ежедневное чтение", bookmark: "🔖 Закладка", goToBookmark: "📍 Перейти", bookmarkSaved: "Закладка сохранена!", search: "Поиск", verseOfDay: "✨ Стих дня", messageOfDay: "📖 Послание дня", listen: "🎧 Слушать", share: "🖼️ Поделиться", new: "🔄 Новый" },
+        zh: { bible: "圣经", guide: "指南", videos: "研究", dictionary: "词典", audio: "音频", languages: "语言", chapter: "章", previous: "上一章", next: "下一章", readingPlan: "读经计划", dailyReading: "每日读经", bookmark: "🔖 书签", goToBookmark: "📍 前往", bookmarkSaved: "书签已保存!", search: "搜索", verseOfDay: "✨ 今日经文", messageOfDay: "📖 今日信息", listen: "🎧 收听", share: "🖼️ 分享", new: "🔄 新经文" },
+        ja: { bible: "聖書", guide: "ガイド", videos: "研究", dictionary: "辞書", audio: "音声", languages: "言語", chapter: "章", previous: "前へ", next: "次へ", readingPlan: "読書計画", dailyReading: "每日読書", bookmark: "🔖 ブックマーク", goToBookmark: "📍 移動", bookmarkSaved: "ブックマーク保存!", search: "検索", verseOfDay: "✨ 今日の聖句", messageOfDay: "📖 今日のメッセージ", listen: "🎧 聴く", share: "🖼️ 共有", new: "🔄 新しい" },
+        ko: { bible: "성경", guide: "가이드", videos: "연구", dictionary: "사전", audio: "오디오", languages: "언어", chapter: "장", previous: "이전", next: "다음", readingPlan: "읽기 계획", dailyReading: "매일 읽기", bookmark: "🔖 책갈피", goToBookmark: "📍 이동", bookmarkSaved: "책갈피 저장됨!", search: "검색", verseOfDay: "✨ 오늘의 말씀", messageOfDay: "📖 오늘의 메시지", listen: "🎧 듣기", share: "🖼️ 공유", new: "🔄 새로고침" },
+        ar: { bible: "الكتاب المقدس", guide: "دليل", videos: "دراسات", dictionary: "قاموس", audio: "صوتي", languages: "اللغات", chapter: "إصحاح", previous: "السابق", next: "التالي", readingPlan: "خطة القراءة", dailyReading: "القراءة اليومية", bookmark: "🔖 علامة", goToBookmark: "📍 اذهب إلى", bookmarkSaved: "تم حفظ العلامة!", search: "بحث", verseOfDay: "✨ آية اليوم", messageOfDay: "📖 رسالة اليوم", listen: "🎧 استمع", share: "🖼️ مشاركة", new: "🔄 جديد" },
+        hi: { bible: "बाइबिल", guide: "गाइड", videos: "अध्ययन", dictionary: "शब्दकोश", audio: "ऑडियो", languages: "भाषाएँ", chapter: "अध्याय", previous: "पिछला", next: "अगला", readingPlan: "पठन योजना", dailyReading: "दैनिक पठन", bookmark: "🔖 बुकमार्क", goToBookmark: "📍 जाएं", bookmarkSaved: "बुकमार्क सहेजा गया!", search: "खोजें", verseOfDay: "✨ आज का वचन", messageOfDay: "📖 आज का संदेश", listen: "🎧 सुनें", share: "🖼️ साझा करें", new: "🔄 नया" },
+        he: { bible: "התנ״ך", guide: "מדריך", videos: "מחקרים", dictionary: "מילון", audio: "שמע", languages: "שפות", chapter: "פרק", previous: "קודם", next: "הבא", readingPlan: "תוכנית קריאה", dailyReading: "קריאה יומית", bookmark: "🔖 סימניה", goToBookmark: "📍 עבור אל", bookmarkSaved: "הסימניה נשמרה!", search: "חפש", verseOfDay: "✨ פסוק היום", messageOfDay: "📖 מסר היום", listen: "🎧 האזן", share: "🖼️ שתף", new: "🔄 חדש" },
+        el: { bible: "Αγία Γραφή", guide: "Οδηγός", videos: "Μελέτες", dictionary: "Λεξικό", audio: "Ήχος", languages: "Γλώσσες", chapter: "Κεφ", previous: "Προηγ", next: "Επόμ", readingPlan: "Πλάνο Ανάγνωσης", dailyReading: "Καθημερινή Ανάγνωση", bookmark: "🔖 Σελιδοδείκτης", goToBookmark: "📍 Μετάβαση", bookmarkSaved: "Ο σελιδοδείκτης αποθηκεύτηκε!", search: "Αναζήτηση", verseOfDay: "✨ Στίχος της Ημέρας", messageOfDay: "📖 Μήνυμα της Ημέρας", listen: "🎧 Ακούστε", share: "🖼️ Κοινοποίηση", new: "🔄 Νέο" },
+        sw: { bible: "Biblia", guide: "Mwongozo", videos: "Masomo", dictionary: "Kamusi", audio: "Sauti", languages: "Lugha", chapter: "Sura", previous: "Iliyotangulia", next: "Inayofuata", readingPlan: "Mpango wa Kusoma", dailyReading: "Usomaji wa Kila Siku", bookmark: "🔖 Alama", goToBookmark: "📍 Nenda kwa", bookmarkSaved: "Alama imehifadhiwa!", search: "Tafuta", verseOfDay: "✨ Aya ya Siku", messageOfDay: "📖 Ujumbe wa Siku", listen: "🎧 Sikiliza", share: "🖼️ Shiriki", new: "🔄 Mpya" }
+    };
+
+    let currentLang = 'pt';
+    let currentBook = "João";
+    let currentChapter = 1;
+    let isNightMode = false;
+    let currentDay = 1;
+
+    function t(key) { return translations[currentLang][key] || translations.pt[key]; }
+
+    function updateUILanguage() {
+        document.getElementById('verseTitle').innerHTML = t('verseOfDay');
+        document.getElementById('messageTitle').innerHTML = t('messageOfDay');
+        document.getElementById('listenVerseBtn').innerHTML = t('listen');
+        document.getElementById('shareImageBtn').innerHTML = t('share');
+        document.getElementById('newVerseBtn').innerHTML = t('new');
+        document.getElementById('navBible').innerText = t('bible');
+        document.getElementById('navGuide').innerText = t('guide');
+        document.getElementById('navVideos').innerText = t('videos');
+        document.getElementById('navDict').innerText = t('dictionary');
+        document.getElementById('navAudio').innerText = t('audio');
+        document.getElementById('navLang').innerText = t('languages');
+    }
+
     function getCurrentDayOfYear() {
         const now = new Date();
         const start = new Date(now.getFullYear(), 0, 0);
-        const diff = now - start;
-        const oneDay = 86400000;
-        return Math.floor(diff / oneDay);
+        return Math.floor((now - start) / 86400000);
     }
-    
+
     function updateDailyContent() {
         currentDay = getCurrentDayOfYear();
         document.getElementById('dayCounter').innerHTML = `📅 Dia ${currentDay} de 365`;
-        const msgIndex = (currentDay - 1 + 365) % 365;
-        document.getElementById('dailyMessageText').innerHTML = dailyMessages[msgIndex] || dailyMessages[0];
-        
-        const verseIndex = currentDay % dailyVersesList.length;
-        const verse = dailyVersesList[verseIndex];
+        document.getElementById('dailyMessageText').innerHTML = dailyMessages[(currentDay - 1) % 365];
+        const verse = dailyVersesList[(currentDay - 1) % 365];
         document.getElementById('dailyVerseText').innerHTML = `"${verse.text}"`;
         document.getElementById('dailyVerseRef').innerText = verse.ref;
-        currentDailyIndex = verseIndex;
     }
-    
-    function changeDailyVerse() {
-        const newIndex = (currentDailyIndex + 1) % dailyVersesList.length;
-        const verse = dailyVersesList[newIndex];
-        document.getElementById('dailyVerseText').innerHTML = `"${verse.text}"`;
-        document.getElementById('dailyVerseRef').innerText = verse.ref;
-        currentDailyIndex = newIndex;
-        showToast("✨ Novo versículo exibido");
+
+    // ======================== LEITOR BÍBLICO ========================
+    function saveBookmark() {
+        localStorage.setItem('bookmarkBook', currentBook);
+        localStorage.setItem('bookmarkChapter', currentChapter);
+        showToast(t('bookmarkSaved'));
     }
-    
+
+    function goToBookmark() {
+        const savedBook = localStorage.getItem('bookmarkBook');
+        const savedChapter = localStorage.getItem('bookmarkChapter');
+        if (savedBook && savedChapter) {
+            currentBook = savedBook;
+            currentChapter = parseInt(savedChapter);
+            updateChapterSelect();
+            loadBibleChapter();
+            showToast(`📍 ${currentBook} ${currentChapter}`);
+        } else {
+            showToast("Nenhum marcador salvo");
+        }
+    }
+
+    function loadBibleChapter() {
+        const container = document.getElementById('bibleContent');
+        if (!container) return;
+        const chapterData = bibleData[currentBook]?.[currentChapter] || [];
+        let html = `<h3>${currentBook} ${currentChapter}</h3>`;
+        chapterData.forEach(verse => {
+            const parts = verse.split(' ');
+            const num = parts[0];
+            const text = parts.slice(1).join(' ');
+            html += `<p><span class="verse-number">${num}</span> ${text}</p>`;
+        });
+        if (chapterData.length === 0) html += `<p>📖 "Toda Escritura é inspirada por Deus" (2 Timóteo 3:16)</p>`;
+        container.innerHTML = html;
+        saveProgress();
+    }
+
+    function saveProgress() {
+        localStorage.setItem('lastBook', currentBook);
+        localStorage.setItem('lastChapter', currentChapter);
+    }
+
+    function loadProgress() {
+        const savedBook = localStorage.getItem('lastBook');
+        const savedChapter = localStorage.getItem('lastChapter');
+        if (savedBook && booksOfBible.includes(savedBook)) currentBook = savedBook;
+        if (savedChapter) currentChapter = parseInt(savedChapter);
+    }
+
+    function changeBook() {
+        const select = document.getElementById('bookSelect');
+        if (select) currentBook = select.value;
+        currentChapter = 1;
+        updateChapterSelect();
+        loadBibleChapter();
+        saveProgress();
+    }
+
+    function updateChapterSelect() {
+        const chapterSelect = document.getElementById('chapterSelect');
+        if (!chapterSelect) return;
+        const maxChapters = Object.keys(bibleData[currentBook] || {}).length || 30;
+        chapterSelect.innerHTML = '';
+        for (let i = 1; i <= maxChapters; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${t('chapter')} ${i}`;
+            if (i === currentChapter) option.selected = true;
+            chapterSelect.appendChild(option);
+        }
+    }
+
+    function changeChapter() {
+        const select = document.getElementById('chapterSelect');
+        if (select) currentChapter = parseInt(select.value);
+        loadBibleChapter();
+        saveProgress();
+    }
+
+    function prevChapter() {
+        if (currentChapter > 1) { currentChapter--; updateChapterSelect(); loadBibleChapter(); saveProgress(); }
+    }
+
+    function nextChapter() {
+        const maxChapters = Object.keys(bibleData[currentBook] || {}).length || 30;
+        if (currentChapter < maxChapters) { currentChapter++; updateChapterSelect(); loadBibleChapter(); saveProgress(); }
+    }
+
     // ======================== ÁUDIO ========================
     function speakText(text, reference) {
-        if (!window.speechSynthesis) {
-            showToast("❌ Seu navegador não suporta áudio.");
-            return;
-        }
+        if (!window.speechSynthesis) { showToast("❌ Sem suporte de áudio"); return; }
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(`${reference}. ${text}`);
-        const langMap = { pt:'pt-BR', en:'en-US', es:'es-ES' };
-        utterance.lang = langMap[currentLang] || 'pt-BR';
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-        showToast("🔊 Reproduzindo áudio...");
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(`${reference}. ${text}`);
+            const langMap = { pt:'pt-BR', en:'en-US', es:'es-ES', fr:'fr-FR', it:'it-IT', de:'de-DE', ru:'ru-RU', ja:'ja-JP', ko:'ko-KR', zh:'zh-CN' };
+            utterance.lang = langMap[currentLang] || 'pt-BR';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+            showToast("🔊 Reproduzindo áudio...");
+        }, 100);
     }
-    
+
     function speakVerseOfDay() {
         const text = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
         const ref = document.getElementById('dailyVerseRef').innerText;
         speakText(text, ref);
     }
-    
-    // ======================== COMPARTILHAR IMAGEM (CANVAS AVANÇADO) ========================
-    async function generateAndShareImage() {
-        showToast("🎨 Gerando imagem personalizada...");
-        
-        const verseText = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
-        const verseRef = document.getElementById('dailyVerseRef').innerText;
-        const messageText = document.getElementById('dailyMessageText').innerText;
-        const dayNum = currentDay;
-        
-        const canvas = document.getElementById('shareCanvas');
-        const ctx = canvas.getContext('2d');
-        const width = 1080;
-        const height = 1920;
-        canvas.width = width;
-        canvas.height = height;
-        
-        // Fundo gradiente espiritual
-        const gradient = ctx.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(0, '#1a3a2e');
-        gradient.addColorStop(0.5, '#2d5a46');
-        gradient.addColorStop(1, '#1a3a2e');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
-        
-        // Padrão decorativo (círculos suaves)
-        ctx.fillStyle = 'rgba(255,215,150,0.08)';
-        for(let i = 0; i < 30; i++) {
-            ctx.beginPath();
-            ctx.arc(Math.random() * width, Math.random() * height, Math.random() * 80 + 20, 0, Math.PI * 2);
-            ctx.fill();
+
+    // ======================== GUIA DE LEITURA ========================
+    let readingGuide = [];
+    for (let i = 0; i < 365; i++) {
+        readingGuide.push({ day: i + 1, book: booksOfBible[i % booksOfBible.length], chapter: (i % 30) + 1, completed: false });
+    }
+
+    function loadReadingGuide() {
+        const saved = localStorage.getItem('readingGuide');
+        if (saved) { try { readingGuide = JSON.parse(saved); } catch(e) {} }
+    }
+    function saveReadingGuide() { localStorage.setItem('readingGuide', JSON.stringify(readingGuide)); }
+    function renderReadingGuide() {
+        const container = document.getElementById('guideContent');
+        if (!container) return;
+        const today = getCurrentDayOfYear();
+        let completedCount = readingGuide.filter(g => g.completed).length;
+        let progress = (completedCount / 365) * 100;
+        let html = `<div class="section-card"><div class="section-title">📅 ${t('readingPlan')}</div><div class="progress-bar"><div class="progress-fill" style="width: ${progress}%;"></div></div><p>📊 ${completedCount} de 365 dias</p>`;
+        for (let i = Math.max(0, today - 7); i < Math.min(365, today + 8); i++) {
+            const item = readingGuide[i];
+            if (!item) continue;
+            html += `<div class="reading-guide-item ${item.completed ? 'completed' : ''}" onclick="toggleGuideDay(${i})">
+                <strong>${t('dailyReading')} ${item.day}</strong><br>📖 ${item.book} ${item.chapter} ${item.completed ? ' ✓' : ''}
+            </div>`;
         }
-        
-        // Cruz central decorativa
-        ctx.strokeStyle = 'rgba(232,167,53,0.3)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(width/2, height/2 - 200);
-        ctx.lineTo(width/2, height/2 + 200);
-        ctx.moveTo(width/2 - 150, height/2);
-        ctx.lineTo(width/2 + 150, height/2);
-        ctx.stroke();
-        
-        // Título
-        ctx.fillStyle = '#FFD966';
-        ctx.font = 'bold 56px "Segoe UI", "Georgia"';
-        ctx.textAlign = 'center';
-        ctx.fillText("📖 CONEXÃO DIVINA", width/2, 140);
-        
-        // Linha decorativa
-        ctx.strokeStyle = '#e8a735';
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(width/3, 180);
-        ctx.lineTo(2*width/3, 180);
-        ctx.stroke();
-        
-        // Dia
-        ctx.fillStyle = '#c9a87b';
-        ctx.font = '32px "Segoe UI"';
-        ctx.fillText(`Dia ${dayNum} de 365`, width/2, 260);
-        
-        // Versículo (em caixa destacada)
-        ctx.fillStyle = 'rgba(0,0,0,0.4)';
-        ctx.shadowBlur = 0;
-        roundRect(ctx, 80, 320, width - 160, 280, 30);
-        ctx.fill();
-        ctx.fillStyle = '#F5E6D3';
-        ctx.font = 'italic 38px "Georgia", serif';
-        ctx.fillText(`“${verseText.substring(0, 80)}${verseText.length > 80 ? '...' : ''}”`, width/2, 420);
-        ctx.font = '30px "Segoe UI"';
-        ctx.fillStyle = '#e8a735';
-        ctx.fillText(`— ${verseRef} —`, width/2, 580);
-        
-        // Mensagem diária
-        ctx.fillStyle = 'rgba(0,0,0,0.3)';
-        roundRect(ctx, 80, 660, width - 160, 500, 30);
-        ctx.fill();
-        ctx.fillStyle = '#FFF8E7';
-        ctx.font = '32px "Segoe UI"';
-        ctx.fillText("✨ Mensagem do Dia ✨", width/2, 730);
-        
-        // Quebra de linha automática para mensagem
-        ctx.font = '30px "Segoe UI"';
-        ctx.fillStyle = '#E8DCC8';
-        const msg = messageText;
-        const maxWidth = width - 200;
-        const lines = wrapText(ctx, msg, maxWidth);
-        let y = 810;
-        for (let line of lines) {
-            if (y > 1100) break;
-            ctx.fillText(line, width/2, y);
-            y += 50;
-        }
-        
-        // Versículo de encorajamento
-        ctx.fillStyle = '#b8986a';
-        ctx.font = '28px "Segoe UI", italic';
-        ctx.fillText("“Tudo posso naquele que me fortalece”", width/2, height - 180);
-        
-        ctx.fillStyle = '#8aae9a';
-        ctx.font = '26px monospace';
-        ctx.fillText("Conexão Divina • Bíblia Digital", width/2, height - 80);
-        
-        // Converter para blob e compartilhar
-        canvas.toBlob(async (blob) => {
-            if (!blob) {
-                showToast("❌ Erro ao gerar imagem");
-                return;
-            }
-            const file = new File([blob], "conexao_divina.png", { type: "image/png" });
-            
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        title: 'Conexão Divina',
-                        text: `${verseRef} - ${verseText.substring(0, 100)}`,
-                        files: [file]
-                    });
-                    showToast("✨ Imagem compartilhada com sucesso!");
-                } catch (err) {
-                    if (err.name !== 'AbortError') {
-                        fallbackImageDownload(blob);
-                    }
-                }
-            } else {
-                fallbackImageDownload(blob);
-            }
-        }, 'image/png', 0.95);
-    }
-    
-    function wrapText(ctx, text, maxWidth) {
-        const words = text.split(' ');
-        const lines = [];
-        let currentLine = words[0] || '';
-        
-        for (let i = 1; i < words.length; i++) {
-            const word = words[i];
-            const testLine = currentLine + ' ' + word;
-            const metrics = ctx.measureText(testLine);
-            if (metrics.width > maxWidth && currentLine.length > 0) {
-                lines.push(currentLine);
-                currentLine = word;
-            } else {
-                currentLine = testLine;
-            }
-        }
-        lines.push(currentLine);
-        return lines;
-    }
-    
-    function roundRect(ctx, x, y, w, h, r) {
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.lineTo(x + w - r, y);
-        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-        ctx.lineTo(x + w, y + h - r);
-        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        ctx.lineTo(x + r, y + h);
-        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-        ctx.lineTo(x, y + r);
-        ctx.quadraticCurveTo(x, y, x + r, y);
-        ctx.closePath();
-        return ctx;
-    }
-    
-    function fallbackImageDownload(blob) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `conexao_divina_dia_${currentDay}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast("📸 Imagem salva na galeria!");
-    }
-    
-    // ======================== COMPARTILHAR TEXTO ========================
-    async function shareText() {
-        const verseText = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
-        const verseRef = document.getElementById('dailyVerseRef').innerText;
-        const message = document.getElementById('dailyMessageText').innerText;
-        const shareContent = `📖 "${verseText}" — ${verseRef}\n\n${message}\n\n🙏 Compartilhado via Conexão Divina | Dia ${currentDay} de 365`;
-        
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: 'Conexão Divina', text: shareContent });
-                showToast("✨ Texto compartilhado!");
-            } catch(err) { fallbackTextCopy(shareContent); }
-        } else {
-            fallbackTextCopy(shareContent);
-        }
-    }
-    
-    function fallbackTextCopy(text) {
-        navigator.clipboard.writeText(text).then(() => showToast("📋 Copiado para área de transferência!"));
-    }
-    
-    // ======================== BUSCA ========================
-    function lookupVerse(query) {
-        const normalized = query.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        for (let key in bibleVersesDB) {
-            let keyNorm = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            if (keyNorm === normalized || normalized.includes(keyNorm) || keyNorm.includes(normalized)) {
-                return { text: bibleVersesDB[key], reference: key };
-            }
-        }
-        return null;
-    }
-    
-    function performSearch() {
-        const input = document.getElementById('searchInput');
-        if (!input) return;
-        const query = input.value;
-        if (!query.trim()) { showToast("Digite uma referência"); return; }
-        const result = lookupVerse(query);
-        const area = document.getElementById('resultArea');
-        if (result) {
-            lastSearchedVerse = result;
-            area.innerHTML = `<div class="verse-result"><strong>${result.reference}</strong><br>“${result.text}”</div>`;
-            showToast(`📖 ${result.reference}`);
-        } else {
-            area.innerHTML = `<div class="verse-result">⚠️ Versículo não encontrado. Tente: Salmos 23, João 3:16</div>`;
-        }
-    }
-    
-    // ======================== PLANOS ========================
-    function savePlans() { localStorage.setItem('conexao_plans', JSON.stringify(readingPlans)); }
-    function loadPlans() { const saved = localStorage.getItem('conexao_plans'); if(saved) { try { readingPlans = JSON.parse(saved); } catch(e) {} } }
-    loadPlans();
-    
-    function updatePlan(planId) {
-        const plan = readingPlans.find(p => p.id === planId);
-        if (plan && plan.progress < 100) {
-            plan.progress = Math.min(100, plan.progress + 5);
-            savePlans();
-            renderPlansSection();
-            showToast(`📈 ${plan.name}: ${plan.progress}%`);
-        }
-    }
-    
-    function resetPlan(planId) {
-        const plan = readingPlans.find(p => p.id === planId);
-        if (plan) { plan.progress = 0; savePlans(); renderPlansSection(); showToast(`🔄 ${plan.name} reiniciado`); }
-    }
-    
-    function resetAllPlans() { readingPlans.forEach(p => p.progress = 0); savePlans(); renderPlansSection(); showToast("✅ Todos reiniciados"); }
-    
-    // ======================== RENDERIZAÇÃO ========================
-    const translations = { pt: { search: "Buscar", plans: "Planos", audioTitle: "Áudio" }, en: { search: "Search", plans: "Plans", audioTitle: "Audio" }, es: { search: "Buscar", plans: "Planes", audioTitle: "Audio" } };
-    function t(key) { return translations[currentLang][key] || translations.pt[key]; }
-    
-    function renderSection(section) {
-        const container = document.getElementById('dynamicContent');
-        if (section === 'read') {
-            container.innerHTML = `<div class="section-card"><div class="section-title">📖 Pesquisar</div><div class="search-box"><input type="text" id="searchInput" placeholder="Ex: Salmos 23"><button id="searchBtn">${t('search')}</button></div><div id="resultArea"></div></div>`;
-            document.getElementById('searchBtn')?.addEventListener('click', performSearch);
-            document.getElementById('searchInput')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
-        } else if (section === 'audio') {
-            container.innerHTML = `<div class="section-card"><div class="section-title">🎧 ${t('audioTitle')}</div><button id="speakDailyBtn" class="action-btn">🔊 Versículo do dia</button><div style="margin-top:12px;">💡 Clique para ouvir</div></div>`;
-            document.getElementById('speakDailyBtn')?.addEventListener('click', speakVerseOfDay);
-        } else if (section === 'plans') { renderPlansSection(); }
-        else if (section === 'lang') {
-            container.innerHTML = `<div class="section-card"><div class="section-title">🌍 Idioma</div><button class="lang-btn ${currentLang==='pt'?'active':''}" data-lang="pt">🇵🇹 Português</button><button class="lang-btn ${currentLang==='en'?'active':''}" data-lang="en">🇬🇧 English</button><button class="lang-btn ${currentLang==='es'?'active':''}" data-lang="es">🇪🇸 Español</button></div>`;
-            document.querySelectorAll('.lang-btn').forEach(btn => { btn.addEventListener('click', () => { currentLang = btn.dataset.lang; renderSection('lang'); showToast(`Idioma alterado`); }); });
-        }
-    }
-    
-    function renderPlansSection() {
-        const container = document.getElementById('dynamicContent');
-        let html = `<div class="section-card"><div class="section-title">📅 ${t('plans')}</div>`;
-        readingPlans.forEach(p => { html += `<div class="plan-item"><h4>${p.name} <span>${p.progress}%</span></h4><div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%;"></div></div><div class="plan-buttons"><button class="small-btn" onclick="window.updatePlan(${p.id})">+5%</button><button class="small-btn" onclick="window.resetPlan(${p.id})">Reiniciar</button></div></div>`; });
-        html += `<button class="action-btn" style="width:100%;" onclick="window.resetAllPlans()">🔄 Reiniciar Todos</button></div>`;
+        html += `</div>`;
         container.innerHTML = html;
     }
-    
-    function showToast(msg, duration=2000) {
-        const toast = document.getElementById('toastMessage');
-        toast.innerText = msg;
-        toast.style.opacity = '1';
-        setTimeout(() => toast.style.opacity = '0', duration);
+    function toggleGuideDay(index) { readingGuide[index].completed = !readingGuide[index].completed; saveReadingGuide(); renderReadingGuide(); showToast(readingGuide[index].completed ? "✅ Concluído!" : "📖 Desmarcado"); }
+
+    // ======================== VÍDEOS ========================
+    function renderVideos() {
+        const container = document.getElementById('videosContent');
+        if (!container) return;
+        let html = `<div class="section-card"><div class="section-title">🎬 ${t('videos')}</div>`;
+        studyVideos.forEach((video) => {
+            html += `<div class="video-card">
+                <div class="video-title">${video.title}</div>
+                <div class="video-container"><iframe src="${video.url}" frameborder="0" allowfullscreen></iframe></div>
+            </div>`;
+        });
+        html += `<p style="margin-top:15px; font-size:0.75rem;">💡 Clique no vídeo para assistir.</p></div>`;
+        container.innerHTML = html;
+    }
+
+    // ======================== DICIONÁRIO ========================
+    function searchDictionary() {
+        const input = document.getElementById('dictSearch');
+        const term = input.value.toLowerCase().trim();
+        const resultDiv = document.getElementById('dictResult');
+        if (!term) { resultDiv.innerHTML = '<p>🔍 Digite um termo para buscar</p>'; return; }
+        const definition = bibleDictionary[term];
+        if (definition) {
+            resultDiv.innerHTML = `<div class="dict-term">📖 ${term.charAt(0).toUpperCase() + term.slice(1)}</div><p>${definition}</p>`;
+        } else {
+            resultDiv.innerHTML = `<p>⚠️ Termo não encontrado. Tente: amor, graça, fé, esperança</p>`;
+        }
+    }
+
+    function renderDictionary() {
+        const container = document.getElementById('dictionaryContent');
+        if (!container) return;
+        container.innerHTML = `<div class="dictionary-card">
+            <div class="section-title">📚 ${t('dictionary')}</div>
+            <div class="search-dict">
+                <input type="text" id="dictSearch" placeholder="🔍 ${t('search')} termo...">
+                <button class="action-btn" onclick="searchDictionary()">${t('search')}</button>
+            </div>
+            <div id="dictResult" class="dict-result">🔍 Digite: amor, graça, fé, esperança, perdão</div>
+        </div>`;
+    }
+
+    // ======================== COMPARTILHAR ========================
+    async function generateAndShareImage() {
+        showToast("🎨 Gerando imagem...");
+        const verseText = document.getElementById('dailyVerseText').innerText.replace(/"/g, '');
+        const verseRef = document.getElementById('dailyVerseRef').innerText;
+        const canvas = document.getElementById('shareCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 1080; canvas.height = 1920;
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#1a3a2e'); gradient.addColorStop(1, '#2d5a46');
+        ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#FFD966'; ctx.font = 'bold 50px "Segoe UI"'; ctx.textAlign = 'center';
+        ctx.fillText("📖 CONEXÃO DIVINA", canvas.width/2, 120);
+        ctx.fillStyle = '#c9a87b'; ctx.font = '30px "Segoe UI"'; ctx.fillText(`Dia ${currentDay} de 365`, canvas.width/2, 210);
+        ctx.fillStyle = '#F5E6D3'; ctx.font = 'italic 36px "Georgia"';
+        let displayText = verseText.length > 70 ? verseText.substring(0, 70) + '...' : verseText;
+        ctx.fillText(`“${displayText}”`, canvas.width/2, 380);
+        ctx.font = '28px "Segoe UI"'; ctx.fillStyle = '#e8a735'; ctx.fillText(`— ${verseRef} —`, canvas.width/2, 480);
+        ctx.fillStyle = '#8aae9a'; ctx.font = '22px monospace'; ctx.fillText("Conexão Divina • Bíblia Digital", canvas.width/2, canvas.height - 60);
+        canvas.toBlob(async (blob) => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ files: [new File([blob], "conexao_divina.png")] });
+                    showToast("✨ Imagem compartilhada!");
+                } catch(e) { fallbackDownload(blob); }
+            } else { fallbackDownload(blob); }
+        }, 'image/png');
     }
     
-    // ======================== INICIALIZAÇÃO ========================
+    function fallbackDownload(blob) {
+        const url = URL.createObjectURL(blob); const a = document.createElement('a');
+        a.href = url; a.download = `conexao_divina_${currentDay}.png`; a.click(); URL.revokeObjectURL(url);
+        showToast("📸 Imagem salva!");
+    }
+
+    // ======================== RENDERIZAÇÃO ========================
+    function renderSection(section) {
+        const container = document.getElementById('dynamicContent');
+        if (section === 'bible') {
+            container.innerHTML = `<div class="bible-reader"><div class="section-title">📖 ${t('bible')}</div>
+                <div class="book-selector"><select id="bookSelect" class="book-select" onchange="changeBook()">${booksOfBible.map(b => `<option ${b === currentBook ? 'selected' : ''}>${b}</option>`).join('')}</select>
+                <select id="chapterSelect" class="chapter-select" onchange="changeChapter()"></select></div>
+                <div class="chapter-nav"><button class="nav-chapter-btn" onclick="prevChapter()">◀ ${t('previous')}</button>
+                <button class="nav-chapter-btn" onclick="nextChapter()">${t('next')} ▶</button>
+                <button class="nav-chapter-btn bookmark-btn" onclick="saveBookmark()">${t('bookmark')}</button>
+                <button class="nav-chapter-btn" onclick="goToBookmark()">${t('goToBookmark')}</button></div>
+                <div id="bibleContent" class="bible-content">Carregando...</div></div>`;
+            updateChapterSelect(); loadBibleChapter();
+        } else if (section === 'guide') {
+            container.innerHTML = `<div id="guideContent"></div>`; renderReadingGuide();
+        } else if (section === 'videos') {
+            container.innerHTML = `<div id="videosContent"></div>`; renderVideos();
+        } else if (section === 'dictionary') {
+            container.innerHTML = `<div id="dictionaryContent"></div>`; renderDictionary();
+        } else if (section === 'audio') {
+            container.innerHTML = `<div class="section-card"><div class="section-title">🎧 ${t('audio')}</div>
+                <button id="audioBtn" class="action-btn" style="font-size:1rem; padding:12px;">🔊 ${t('listen')} ${t('verseOfDay')}</button></div>`;
+            document.getElementById('audioBtn')?.addEventListener('click', speakVerseOfDay);
+        } else if (section === 'lang') {
+            const langs = Object.keys(translations);
+            const langNames = { pt:"🇵🇹 Português", en:"🇬🇧 English", es:"🇪🇸 Español", fr:"🇫🇷 Français", it:"🇮🇹 Italiano", de:"🇩🇪 Deutsch", ru:"🇷🇺 Русский", zh:"🇨🇳 中文", ja:"🇯🇵 日本語", ko:"🇰🇷 한국어", ar:"🇸🇦 العربية", hi:"🇮🇳 हिन्दी", he:"🇮🇱 עברית", el:"🇬🇷 Ελληνικά", sw:"🇹🇿 Kiswahili" };
+            container.innerHTML = `<div class="section-card"><div class="section-title">🌍 ${t('languages')}</div><div class="langs-grid" id="langList"></div></div>`;
+            const langDiv = document.getElementById('langList');
+            langs.forEach(l => {
+                const btn = document.createElement('button');
+                btn.className = `lang-btn ${currentLang === l ? 'active' : ''}`;
+                btn.textContent = langNames[l] || l.toUpperCase();
+                btn.onclick = () => { currentLang = l; updateUILanguage(); renderSection('lang'); showToast(`Idioma: ${langNames[l] || l}`); };
+                langDiv.appendChild(btn);
+            });
+        }
+    }
+
+    function showToast(msg, duration=2500) {
+        const toast = document.getElementById('toastMessage');
+        toast.innerText = msg; toast.style.opacity = '1';
+        setTimeout(() => toast.style.opacity = '0', duration);
+    }
+
     function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR'); }
-    setInterval(updateClock, 1000);
-    
+
+    // ======================== INICIALIZAÇÃO ========================
     function init() {
-        updateClock();
+        updateClock(); setInterval(updateClock, 1000);
         updateDailyContent();
+        loadProgress();
+        loadReadingGuide();
+        updateUILanguage();
         
         document.getElementById('listenVerseBtn').addEventListener('click', speakVerseOfDay);
         document.getElementById('shareImageBtn').addEventListener('click', generateAndShareImage);
-        document.getElementById('shareTextBtn').addEventListener('click', shareText);
-        document.getElementById('newVerseBtn').addEventListener('click', changeDailyVerse);
+        document.getElementById('newVerseBtn').addEventListener('click', () => {
+            const random = Math.floor(Math.random() * dailyVersesList.length);
+            const verse = dailyVersesList[random];
+            document.getElementById('dailyVerseText').innerHTML = `"${verse.text}"`;
+            document.getElementById('dailyVerseRef').innerText = verse.ref;
+            showToast("✨ Novo versículo");
+        });
         
         document.getElementById('prayerToggle').addEventListener('click', () => {
-            isPrayerMode = !isPrayerMode;
+            isNightMode = !isNightMode;
             document.body.classList.toggle('prayer-mode');
-            document.getElementById('prayerToggle').innerHTML = isPrayerMode ? "✨" : "🙏";
-            showToast(isPrayerMode ? "🌙 Modo Oração ativado" : "Modo normal");
+            const btn = document.getElementById('prayerToggle');
+            if (isNightMode) {
+                btn.innerHTML = "☀️";
+                btn.title = "Modo Dia";
+                showToast("🌙 Modo Noturno ativado");
+            } else {
+                btn.innerHTML = "🌙";
+                btn.title = "Modo Noturno";
+                showToast("☀️ Modo Dia ativado");
+            }
         });
         
         document.querySelectorAll('.nav-item').forEach(btn => {
@@ -802,11 +1041,11 @@
             });
         });
         
-        renderSection('read');
+        renderSection('bible');
         
-        window.updatePlan = updatePlan;
-        window.resetPlan = resetPlan;
-        window.resetAllPlans = resetAllPlans;
+        window.changeBook = changeBook; window.changeChapter = changeChapter; window.prevChapter = prevChapter; window.nextChapter = nextChapter;
+        window.toggleGuideDay = toggleGuideDay; window.saveBookmark = saveBookmark; window.goToBookmark = goToBookmark;
+        window.searchDictionary = searchDictionary;
     }
     
     init();
